@@ -16,6 +16,10 @@ export default class stEngine{
         if(autostart) this.start();
     }
 
+    /**
+     * 
+     * @param {boolean} forced Forced the navigator reload.
+     */
     restart(forced = false){
         if(!forced && this.restarter) this.restarter();
         else document.location.reload();
@@ -27,20 +31,29 @@ export default class stEngine{
     }
 
     #update(){
-        this.updater();
+        if(this.updater) this.updater();
         requestAnimationFrame(() => this.#update());
     }
 
-    sound({src, volume = 1}){
+    /**
+     * 
+     * @param {{src:string, volume?:number, autoplay?:boolean}}
+     * @returns {Audio}
+     */
+    sound({src, volume = 1, autoplay = true}){
         let sound = new Audio();
         sound.src = src;
         sound.volume = (volume > 1) ? 1 : (volume < 0) ? 0 : volume;
-        sound.play();
+        if(autoplay) sound.play();
         return sound;
     }
 
+    /** @return {boolean} */
     isPlay(){ return this.gamestate === this.GAMESTATE.PLAY; }
+    /** @return {boolean} */
     isStop(){ return this.gamestate === this.GAMESTATE.STOP; }
+    /** @return {boolean} */
     isPause(){ return this.gamestate === this.GAMESTATE.PAUSE; }
+    /** @return {boolean} */
     isGameOver(){ return this.gamestate === this.GAMESTATE.GAMEOVER; }
 }
