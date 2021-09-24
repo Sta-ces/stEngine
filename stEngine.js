@@ -2,7 +2,6 @@ import { getEl } from './function.js';
 
 export default class stEngine{
     /**
-     * 
      * @param {{canvasid?:string, start?:function, update?:function, restart?:function, autostart?:boolean}} 
      */
     constructor({canvasid = "canvas", start, update, restart, autostart = true}){
@@ -21,7 +20,6 @@ export default class stEngine{
     }
 
     /**
-     * 
      * @param {boolean} forced Forced the navigator reload.
      */
     restart(forced = false){
@@ -40,7 +38,6 @@ export default class stEngine{
     }
 
     /**
-     * 
      * @param {{src:string, volume?:number, autoplay?:boolean}}
      * @returns {Audio}
      */
