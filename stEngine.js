@@ -1,6 +1,10 @@
 import { getEl } from './function.js';
 
 export default class stEngine{
+    /**
+     * 
+     * @param {{canvasid?:string, start?:function, update?:function, restart?:function, autostart?:boolean}} 
+     */
     constructor({canvasid = "canvas", start, update, restart, autostart = true}){
         this.canvas = getEl(canvasid);
         this.starter = start;
