@@ -31,7 +31,7 @@ export default class stEngine{
 
     start(){
         if(this.starter) this.starter();
-        if(this.updater) this.#update();
+        this.#update();
     }
 
     #update(){
