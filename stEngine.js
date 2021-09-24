@@ -6,6 +6,13 @@ export default class stEngine{
         this.starter = start;
         this.updater = update;
         this.restarter = restart;
+        this.GAMESTATE = {
+            PLAY: "play",
+            STOP: "stop",
+            PAUSE: "pause",
+            GAMEOVER: "gameover"
+        };
+        this.gamestate = this.GAMESTATE.PLAY;
         if(autostart) this.start();
     }
 
@@ -31,4 +38,9 @@ export default class stEngine{
         sound.play();
         return sound;
     }
+
+    isPlay(){ return this.gamestate === this.GAMESTATE.PLAY; }
+    isStop(){ return this.gamestate === this.GAMESTATE.STOP; }
+    isPause(){ return this.gamestate === this.GAMESTATE.PAUSE; }
+    isGameOver(){ return this.gamestate === this.GAMESTATE.GAMEOVER; }
 }
