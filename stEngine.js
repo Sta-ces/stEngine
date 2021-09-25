@@ -2,10 +2,12 @@ import { getEl } from './function.js';
 
 export default class stEngine{
     /**
-     * @param {{canvasid?:string, start?:function, update?:function, restart?:function, autostart?:boolean, autorefresh?:boolean}} 
+     * @param {{canvasid?:string, start?:function, update?:function, restart?:function, width?:number, height?:number, autostart?:boolean, autorefresh?:boolean}} 
      */
-    constructor({canvasid = "canvas", start, update, restart, autostart = true, autorefresh = true}){
+    constructor({canvasid = "canvas", start, update, restart, width = null, height = null, autostart = true, autorefresh = true}){
         this.canvas = getEl(canvasid);
+        this.canvas.width = (width) ? width : innerWidth;
+        this.canvas.height = (height) ? height : innerHeight;
         this.starter = start;
         this.updater = update;
         this.restarter = restart;
