@@ -2,13 +2,14 @@ import { getEl } from './function.js';
 
 export default class stEngine{
     /**
-     * @param {{canvasid?:string, start?:function, update?:function, restart?:function, autostart?:boolean}} 
+     * @param {{canvasid?:string, start?:function, update?:function, restart?:function, autostart?:boolean, autorefresh?:boolean}} 
      */
-    constructor({canvasid = "canvas", start, update, restart, autostart = true}){
+    constructor({canvasid = "canvas", start, update, restart, autostart = true, autorefresh = true}){
         this.canvas = getEl(canvasid);
         this.starter = start;
         this.updater = update;
         this.restarter = restart;
+        this.autorefresh = autorefresh;
         this.GAMESTATE = {
             PLAY: "play",
             STOP: "stop",
@@ -16,6 +17,9 @@ export default class stEngine{
             GAMEOVER: "gameover"
         };
         this.gamestate = this.GAMESTATE.PLAY;
+        this.context = this.canvas.getContext('2d');
+
+        // END CONSTRUCTOR AND START SYSTEM
         if(autostart) this.start();
     }
 
@@ -33,6 +37,7 @@ export default class stEngine{
     }
 
     update(){
+        if(this.autorefresh) this.context.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
         if(this.updater) this.updater();
         requestAnimationFrame(() => this.update());
     }
