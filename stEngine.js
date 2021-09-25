@@ -29,12 +29,12 @@ export default class stEngine{
 
     start(){
         if(this.starter) this.starter();
-        this.#update();
+        this.update();
     }
 
-    #update(){
+    update(){
         if(this.updater) this.updater();
-        requestAnimationFrame(() => this.#update());
+        requestAnimationFrame(() => this.update());
     }
 
     /**
