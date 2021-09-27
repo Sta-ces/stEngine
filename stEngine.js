@@ -41,8 +41,11 @@ export default class stEngine{
     update(){
         if(this.autorefresh) this.context.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
         if(this.updater) this.updater();
+        this.draw();
         requestAnimationFrame(() => this.update());
     }
+
+    draw(){}
 
     /**
      * @param {{src:string, volume?:number, autoplay?:boolean}}
