@@ -61,4 +61,18 @@ export default class Shapes{
             if(strokeWidth > 0 || strokeColor) ctx.stroke();
         }
     }
+
+    static Img(ctx, {src, x, y, w, h}){
+        let img = new Image();
+        img.src = src;
+        ctx.drawImage(img, x, y, w, h);
+    }
+
+    static SVG(ctx, {path, fillColor = "wheat", scale = 1}){
+        let svg = new Path2D(path);
+        ctx.fillStyle = fillColor;
+        ctx.scale(scale, scale);
+        ctx.fill(svg);
+        return svg;
+    }
 }

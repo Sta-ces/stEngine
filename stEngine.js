@@ -1,4 +1,4 @@
-import { getEl } from './function.js';
+import { action, getEl } from './function.js';
 
 export default class stEngine{
     /**
@@ -17,6 +17,14 @@ export default class stEngine{
             GAMEOVER: "gameover"
         };
         this.gamestate = this.GAMESTATE.PLAY;
+        this.resize(width, height);
+        if(width && height) action("resize", this);
+
+        // END CONSTRUCTOR AND START SYSTEM
+        if(autostart) this.start();
+    }
+
+    resize(width = null, height = null){
         if(this.canvas.tagName == "CANVAS"){
             this.context = this.canvas.getContext('2d');
             this.canvas.width = (width) ? width : innerWidth;
@@ -27,9 +35,6 @@ export default class stEngine{
             this.canvas.style.width = (width) ? width+"px" : "100vw";
             this.canvas.style.height = (height) ? height+"px" : "100vh";
         }
-
-        // END CONSTRUCTOR AND START SYSTEM
-        if(autostart) this.start();
     }
 
     /**
@@ -66,6 +71,10 @@ export default class stEngine{
         sound.volume = (volume > 1) ? 1 : (volume < 0) ? 0 : volume;
         if(autoplay) sound.play();
         return sound;
+    }
+
+    handleEvent(event){
+        if(event.type === "resize") this.resize();
     }
 
     /** @return {boolean} */
