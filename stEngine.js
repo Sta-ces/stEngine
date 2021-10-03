@@ -6,8 +6,6 @@ export default class stEngine{
      */
     constructor({canvasid = "canvas", start, update, restart, width = null, height = null, autostart = true, autorefresh = true}){
         this.canvas = getEl(canvasid);
-        this.canvas.width = (width) ? width : innerWidth;
-        this.canvas.height = (height) ? height : innerHeight;
         this.starter = start;
         this.updater = update;
         this.restarter = restart;
@@ -19,7 +17,16 @@ export default class stEngine{
             GAMEOVER: "gameover"
         };
         this.gamestate = this.GAMESTATE.PLAY;
-        this.context = this.canvas.getContext('2d');
+        if(this.canvas.tagName == "CANVAS"){
+            this.context = this.canvas.getContext('2d');
+            this.canvas.width = (width) ? width : innerWidth;
+            this.canvas.height = (height) ? height : innerHeight;
+        }
+        else{
+            this.context = null;
+            this.canvas.style.width = (width) ? width+"px" : "100vw";
+            this.canvas.style.height = (height) ? height+"px" : "100vh";
+        }
 
         // END CONSTRUCTOR AND START SYSTEM
         if(autostart) this.start();
@@ -33,15 +40,17 @@ export default class stEngine{
         else document.location.reload();
     }
 
+    reload(){ this.restart(true); }
+
     start(){
         if(this.starter) this.starter();
         this.update();
     }
 
     update(){
-        if(this.autorefresh) this.context.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
+        if(this.autorefresh && this.context) this.context.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight);
         if(this.updater) this.updater();
-        this.draw();
+        if(this.context != null) this.draw();
         requestAnimationFrame(() => this.update());
     }
 

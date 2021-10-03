@@ -1,14 +1,5 @@
 export default class Shapes{
-    constructor(ctx, {name = "square", x, y, w, h, r, startAngle = 0, endAngle = 2 * Math.PI, fillColor, strokeColor, strokeWidth = 0}){
-        let options = {x:x, y:y, w:w, h:h, r:r, startAngle: startAngle, endAngle: endAngle, fillColor:fillColor, strokeColor:strokeColor, strokeWidth:strokeWidth};
-        switch(name){
-            case 'rectangle':
-            case 'square': Shapes.Square(ctx, options); break;
-            case 'circle': Shapes.Circle(ctx, options); break;
-            case 'star': Shapes.Star(ctx, options); break;
-        }
-    }
-
+    
     static Square(ctx, {x, y, w, h, fillColor, strokeColor, strokeWidth = 0}){
         if(fillColor) ctx.fillStyle = fillColor;
         if(strokeColor) ctx.strokeStyle = strokeColor;
