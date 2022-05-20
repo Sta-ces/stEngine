@@ -12,7 +12,7 @@ export default class Score{
         this.#checkNegative()
     }
 
-    getScoreFormat(lang){ return new Intl.NumberFormat(lang).format(this.get()) }
+    getScoreFormat(lang){ return new Intl.NumberFormat(lang).format(this.score) }
 
     add(point = 1){
         this.score += point
@@ -26,6 +26,6 @@ export default class Score{
     }
     reset(){ this.score = this.ini }
 
-    #checkNegative(){ if(!this.isNegative) if(this.score < 0) this.score = 0 }
+    #checkNegative(){ if(!this.isNegative && this.score < 0) this.score = 0 }
     #format(){ this.score = Math.round(this.score) }
 }
