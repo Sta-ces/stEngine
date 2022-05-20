@@ -9,17 +9,19 @@ export default class Canvas extends System{
         super()
         this.canvas = document.getElementById(canvasid)
         this.autorefresh = autorefresh
-        if(this.canvas.tagName === "CANVAS"){
-            this.context = this.canvas.getContext('2d')
-            this.canvas.width = (width) ? width : innerWidth
-            this.canvas.height = (height) ? height : innerHeight
-            this.canvasSize = {w: this.canvas.width, h: this.canvas.height}
-        }
-        else{
-            this.context = null
-            this.canvas.style.width = (width) ? width+"px" : "100vw"
-            this.canvas.style.height = (height) ? height+"px" : "100vh"
-            this.canvasSize = {w: this.canvas.style.width, h: this.canvas.style.height}
+        if(this.canvas){
+            if(this.canvas.tagName === "CANVAS"){
+                this.context = this.canvas.getContext('2d')
+                this.canvas.width = (width) ? width : innerWidth
+                this.canvas.height = (height) ? height : innerHeight
+                this.canvasSize = {w: this.canvas.width, h: this.canvas.height}
+            }
+            else{
+                this.context = null
+                this.canvas.style.width = (width) ? width+"px" : "100vw"
+                this.canvas.style.height = (height) ? height+"px" : "100vh"
+                this.canvasSize = {w: this.canvas.style.width, h: this.canvas.style.height}
+            }
         }
     }
 
