@@ -9,7 +9,7 @@ export default class Statistics{
     getCombos(){ return this.combos }
     setCombos(comb){ this.combos = comb }
     addCombos(comb = 1){ this.combos += comb; this.setMaxCombo() }
-    removeCombos(comb = 1){ this.combos -= comb }
+    lessCombos(comb = 1){ this.combos -= comb }
 
     getMaxCombo(){ return this.maxcombo }
     setMaxCombo(){ if(this.combo > this.maxcombo) this.maxcombo = this.combo }
@@ -17,10 +17,10 @@ export default class Statistics{
     getSuccess(){ return this.success }
     setSuccess(succ){ this.success = succ }
     addSuccess(succ = 1){ this.success += succ }
-    removeSuccess(succ = 1){ this.success -= succ }
+    lessSuccess(succ = 1){ this.success -= succ }
 
     getErrors(){ return this.errors }
     setErrors(err){ this.errors = err }
     addErrors(err = 1){ this.errors += err }
-    removeErrors(err = 1){ this.errors -= err }
+    lessErrors(err = 1){ this.errors -= err }
 }
