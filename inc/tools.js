@@ -235,7 +235,7 @@ function sender({action, params = "", method = "POST", type = "text/html"}, call
 
 function loadView({url, container}, callback){
     if(!container) return null
-    fetch(url)
+    return fetch(url)
         .then(response => { return response.text() })
         .then(txt => container.innerHTML = txt)
         .then(callback)
