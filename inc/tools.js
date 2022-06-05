@@ -168,6 +168,7 @@ function sArrayRandom(array){ return array[sRandom(array.length-1)] }
 
 function accentReplace(str){ return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "") }
 function aprostReplace(str){ return str.replace(/.\'/g, "") }
+function compressReplace(str){ return aprostReplace(accentReplace(str)).toLowerCase() }
 
 HTMLElement.prototype.sInsert = (position, string) => {
     switch (position) {
