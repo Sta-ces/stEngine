@@ -1,10 +1,10 @@
 import Timer from "./inc/timer.js"
 
 export default class System{
-    constructor(){
+    constructor(timerStamp = 50){
         this.GAMESTATE = { PLAY: "play", STOP: "stop", PAUSE: "pause", GAMEOVER: "gameover" }
         this.gamestate = this.GAMESTATE.PLAY
-        this.timerStamp = 50
+        this.timerStamp = timerStamp
 
         new Promise((resolve, reject) => setTimeout(() => { resolve(this) }, 250))
             .then((g) => this.Awake(g) )
