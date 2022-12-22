@@ -170,7 +170,7 @@ function accentReplace(str){ return str.normalize("NFD").replace(/[\u0300-\u036f
 function aprostReplace(str){ return str.replace(/.\'/g, "") }
 function compressReplace(str){ return aprostReplace(accentReplace(str)).toLowerCase() }
 
-HTMLElement.prototype.sInsert = (position, string) => {
+HTMLElement.prototype.sInsert = function(position, string) {
     switch (position) {
         case "before": case "beforebegin": case "begin":
         case "start": case "previous":
@@ -192,12 +192,12 @@ HTMLElement.prototype.sInsert = (position, string) => {
     this.insertAdjacentHTML(position, string.trim())
 }
 
-NodeList.prototype.sInsert = (position, string) => {
+NodeList.prototype.sInsert = function(position, string) {
     if (this.length <= 0) return
     this.forEach(element => element.sInsert(position, string) )
 }
 
-HTMLElement.prototype.sModel = (elements) => {
+HTMLElement.prototype.sModel = function(elements) {
     const model = this;
     model.addEventListener("keyup", () => {
         if (elements instanceof NodeList) elements.forEach((element) => element.innerHTML = model.value )
@@ -205,7 +205,7 @@ HTMLElement.prototype.sModel = (elements) => {
     })
 }
 
-HTMLElement.prototype.percentage = ({excute = "percentage", max = 100, min = 0, reduce = 0}) => {
+HTMLElement.prototype.percentage = function({excute = "percentage", max = 100, min = 0, reduce = 0}) {
     if (Number.isNaN(this) || Number.isNaN(max) || Number.isNaN(min) || Number.isNaN(reduce)) return null;
     let rslt = null;
     switch(excute){
@@ -217,7 +217,7 @@ HTMLElement.prototype.percentage = ({excute = "percentage", max = 100, min = 0, 
     return rslt;
 }
 
-HTMLElement.prototype.watchAttr = (nameAttr = "", callback) => {
+HTMLElement.prototype.watchAttr = function(nameAttr = "", callback) {
     let observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
             if(mutation.type === "attributes" && (nameAttr === "" || mutation.attributeName === nameAttr))
@@ -227,7 +227,7 @@ HTMLElement.prototype.watchAttr = (nameAttr = "", callback) => {
     observer.observe(this, { attributes: true })
 }
 
-NodeList.prototype.watchAttr = (nameAttr = "", callback) => {
+NodeList.prototype.watchAttr = function(nameAttr = "", callback) {
     if (this.length <= 0) return
     this.forEach(element => element.watchAttr(nameAttr, callback))
 }
