@@ -218,12 +218,13 @@ HTMLElement.prototype.percentage = ({excute = "percentage", max = 100, min = 0, 
 }
 
 HTMLElement.prototype.watchAttr = (nameAttr = "", callback) => {
-    this.observer = new MutationObserver((mutations) => {
+    let observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
             if(mutation.type === "attributes" && (nameAttr === "" || mutation.attributeName === nameAttr))
                 callback(mutation, mutation.attributeName)
         })
     })
+    observer.observe(this, { attributes: true })
 }
 
 NodeList.prototype.watchAttr = (nameAttr = "", callback) => {
