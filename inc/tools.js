@@ -242,8 +242,8 @@ NodeList.prototype.setClassList = function(check, classname) {
     this.forEach(element => element.setClassList(check, classname))
 }
 
-if(!String.prototype.hasOwnProperty("capitalize"))
-    String.prototype.capitalize = function(str){ return str.charAt(0).toUpperCase() + str.slice(1); }
+if(!String.prototype.hasOwnProperty("toCapitalize"))
+    String.prototype.toCapitalize = function(){ return this.charAt(0).toUpperCase() + this.slice(1); }
 
 function isMobileAndTablet() {
     let check = false
