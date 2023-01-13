@@ -151,6 +151,11 @@ if(!HTMLElement.prototype.hasOwnProperty("html"))
 if(!NodeList.prototype.hasOwnProperty("html"))
     NodeList.prototype.html = function(txt){ this.forEach(el => el.html(txt)) }
 
+Number.prototype.between = function(a, b) {
+    let min = Math.min.apply(Math, [a, b]), max = Math.max.apply(Math, [a, b])
+    return this > min && this < max
+}
+
 function sRandom(max = 1, min = 0) {
     if (isNaN(min) && isNaN(max)) return;
     min = parseFloat(min); max = parseFloat(max);
