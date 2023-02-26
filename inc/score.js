@@ -12,7 +12,7 @@ export default class Score{
         this.#checkNegative()
     }
 
-    getScoreFormat(lang){ return new Intl.NumberFormat(lang).format(this.score) }
+    getScoreFormat(lang, options = {}){ return new Intl.NumberFormat(lang, options).format(this.score) }
 
     add(point = 1){
         this.score += point
