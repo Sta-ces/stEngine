@@ -13,12 +13,12 @@ export default class Typing extends System{
 
     Start(){
         super.Start()
-        action("keydown", event => { this.#KeyAction(event) })
+        document.addEventListener("keydown", this.#KeyAction)
     }
 
     GameOver(){
         super.GameOver()
-        noaction("keydown")
+        document.removeEventListener("keydown", this.#KeyAction)
     }
 
     goodLetter(key){}
