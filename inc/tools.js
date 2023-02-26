@@ -156,6 +156,18 @@ Number.prototype.between = function(a, b) {
     return this > min && this < max
 }
 
+Number.prototype.percentage = function({excute = "percentage", max = 100, min = 0, reduce = 0}) {
+    if (Number.isNaN(this) || Number.isNaN(max) || Number.isNaN(min) || Number.isNaN(reduce)) return null;
+    let rslt = null;
+    switch(excute){
+        case "percentage": rslt = valToPerc(this, max, min); break;
+        case "value": rslt = percToVal(this, max, min); break;
+        case "reduce": rslt = reducePerc(this, reduce); break;
+    }
+    if(excute != "reduce" && reduce > 0) rslt = reducePerc(rslt, reduce);
+    return rslt;
+}
+
 function sRandom(max = 1, min = 0) {
     if (isNaN(min) && isNaN(max)) return;
     min = parseFloat(min); max = parseFloat(max);
@@ -210,18 +222,6 @@ HTMLElement.prototype.sModel = function(elements) {
     })
 }
 
-HTMLElement.prototype.percentage = function({excute = "percentage", max = 100, min = 0, reduce = 0}) {
-    if (Number.isNaN(this) || Number.isNaN(max) || Number.isNaN(min) || Number.isNaN(reduce)) return null;
-    let rslt = null;
-    switch(excute){
-        case "percentage": rslt = valToPerc(this, max, min); break;
-        case "value": rslt = percToVal(this, max, min); break;
-        case "reduce": rslt = reducePerc(this, reduce); break;
-    }
-    if(excute != "reduce" && reduce > 0) rslt = reducePerc(rslt, reduce);
-    return rslt;
-}
-
 HTMLElement.prototype.watchAttr = function(nameAttr = "", callback) {
     let observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
@@ -267,13 +267,14 @@ function sender({action, params = "", method = "POST", type = "text/html"}, call
     xhr.send(params)
 }
 
-function loadView({url, container}, callback){
-    if(!container) return null
-    return fetch(url)
-        .then(response => { return response.text() })
-        .then(txt => container.innerHTML = txt)
-        .then(callback)
-        .catch(err => cerror(err))
+function loadView({url, container}, callback = null){
+    if(!container || !url) return null
+    const result = fetch(url).then(response => { return response.text() })
+    const getResult = async () => {
+        container.innerHTML = await result
+        if(callback !== null) callback(container)
+    }
+    getResult()
 }
 
 function clog(msg){ console.log(msg) }
