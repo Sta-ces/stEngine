@@ -1,11 +1,14 @@
+import Shapes from "../inc/shapes.js"
 import System from "../system.js"
 
 export default class Application extends System{
-    constructor({customElements = {}, isUpdate = false, timerStamp = 2000}){
+    constructor({customTags = {}, isUpdate = false, timerStamp = 2000}){
         super({isUpdate, timerStamp})
-        if(Object.keys(customElements).length > 0){
-            for (const [key, value] of Object.entries(customElements))
-                customElements.define(key, value)
+        if(Object.keys(customTags).length > 0){
+            for (const [key, value] of Object.entries(customTags)){
+                let final_key = (!key.includes("-")) ? `${key.trim()}-tag` : key.trim()
+                customElements.define(final_key, value)
+            }
         }
     }
 
@@ -25,21 +28,7 @@ export default class Application extends System{
         return screen
     }
 
-    create({element = "div", classname = "", id = "", src = "", alt = "", data = "", type = "", attr = {}, parent = null, textContent = null, append = true}){
-        const el = document.createElement(element)
-        if(classname !== "") el.setAttribute("class", classname)
-        if(id !== "") el.setAttribute("id", id)
-        if(src !== "") el.setAttribute("src", src)
-        if(data !== "") el.setAttribute("data", data)
-        if(type !== "") el.setAttribute("type", type)
-        if(alt !== "") el.setAttribute("alt", alt)
-        if(Object.keys(attr).length > 0){
-            for(const [key, value] of Object.entries(attr))
-                el.setAttribute(key, value)
-        }
-        if(textContent) el.innerHTML = textContent
-        if(parent) parent.appendChild(el)
-        else if(append) this.append(el)
-        return el
+    create(base, {element = "div", classname = "", id = "", src = "", alt = "", data = "", type = "", attr = {}, parent = null, textContent = null, append = true}){
+        Shapes.HTML(base, {element, classname, id, src, alt, data, type, attr, parent, textContent, append})
     }
 }
