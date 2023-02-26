@@ -62,7 +62,7 @@ export default class Shapes{
         }
     }
 
-    static HTML(base, {element = "div", classname = "", id = "", src = "", alt = "", data = "", type = "", attr = {}, parent = null, textContent = null, append = true}){
+    static HTML({element = "div", classname = "", id = "", src = "", alt = "", data = "", type = "", attr = {}, parent = null, textContent = null, append = true}){
         const el = document.createElement(element)
         if(classname !== "") el.setAttribute("class", classname)
         if(id !== "") el.setAttribute("id", id)
@@ -75,8 +75,7 @@ export default class Shapes{
                 el.setAttribute(key, value)
         }
         if(textContent) el.innerHTML = textContent
-        if(parent) parent.appendChild(el)
-        else if(append) base.append(el)
+        if(parent && append) parent.append(el)
         return el
     }
 }
