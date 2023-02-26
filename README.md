@@ -12,7 +12,7 @@ import System from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/system.js'
 ```
 If you want to import the Typing system use :
 ```javascript
-import Typing from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/typing.js'
+import Typing from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/types/typing.js'
 ```
 
 ## Demos
