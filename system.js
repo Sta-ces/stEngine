@@ -34,19 +34,19 @@ export default class System{
     
     Play(){
         this.gamestate = this.GAMESTATE.PLAY
-        this.timer.start()
+        this.timer?.start()
     }
     Stop(){
         this.gamestate = this.GAMESTATE.STOP
-        this.timer.stop()
+        this.timer?.stop()
     }
     Pause(){
         this.gamestate = this.GAMESTATE.PAUSE
-        this.timer.stop()
+        this.timer?.stop()
     }
     GameOver(){
         this.gamestate = this.GAMESTATE.GAMEOVER
-        this.timer.stop()
+        this.timer?.stop()
     }
 
     PlaySound({src, volume = 1}){
