@@ -1,12 +1,12 @@
-import System from "./system.js"
+import System from "../system.js"
 
 export default class Canvas extends System{
     /**
      * canvasid = "canvas"
      * @param {{canvasid?:string, width?:number, height?:number, autostart?:boolean, autorefresh?:boolean}} 
      */
-    constructor({canvasid = "canvas", width = null, height = null, autorefresh = true}){
-        super()
+    constructor({canvasid = "canvas", width = null, height = null, autorefresh = true, isUpdate = true, timerStamp = 50}){
+        super({isUpdate, timerStamp})
         this.canvas = document.getElementById(canvasid)
         this.autorefresh = autorefresh
         if(this.canvas){
