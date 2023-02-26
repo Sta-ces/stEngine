@@ -1,51 +1,53 @@
 import Timer from "./inc/timer.js"
 
 export default class System{
-    constructor(timerStamp = 50){
-        this.GAMESTATE = { PLAY: "play", STOP: "stop", PAUSE: "pause", GAMEOVER: "gameover" }
-        this.gamestate = this.GAMESTATE.PLAY
+    static GAMESTATE = { PLAY: "play", STOP: "stop", PAUSE: "pause", GAMEOVER: "gameover" }
+
+    constructor({timerStamp = 50, isUpdate = true}){
+        this.gamestate = System.GAMESTATE.PLAY
         this.timerStamp = timerStamp
-        this.#_()
+        this.#_(isUpdate)
     }
 
-    async #_(){
+    async #_(isUpdate = true){
         await this.Awake()
         await this.Start()
-        this.timer = new Timer(() => { this.Update() }, this.timerStamp)
+        this.timer = (isUpdate) ? new Timer(() => { this.Update() }, this.timerStamp) : null
     }
 
     getState(){ return this.gamestate }
+    setState(state){ return this.gamestate = state }
     getTimerStamp(){ return this.timerStamp }
     setTimer(timer){
         this.timerStamp = timer
-        this.timer.reset(timer)
+        this.timer?.reset(timer)
     }
 
     Awake(){}
     Start(){}
     Update(){
         switch(this.gamestate){
-            case this.GAMESTATE.PLAY: this.Play(); break;
-            case this.GAMESTATE.STOP: this.Stop(); break;
-            case this.GAMESTATE.PAUSE: this.Pause(); break;
-            case this.GAMESTATE.GAMEOVER: this.GameOver(); break;
+            case System.GAMESTATE.PLAY: this.Play(); break;
+            case System.GAMESTATE.STOP: this.Stop(); break;
+            case System.GAMESTATE.PAUSE: this.Pause(); break;
+            case System.GAMESTATE.GAMEOVER: this.GameOver(); break;
         }
     }
     
     Play(){
-        this.gamestate = this.GAMESTATE.PLAY
+        this.gamestate = System.GAMESTATE.PLAY
         this.timer?.start()
     }
     Stop(){
-        this.gamestate = this.GAMESTATE.STOP
+        this.gamestate = System.GAMESTATE.STOP
         this.timer?.stop()
     }
     Pause(){
-        this.gamestate = this.GAMESTATE.PAUSE
+        this.gamestate = System.GAMESTATE.PAUSE
         this.timer?.stop()
     }
     GameOver(){
-        this.gamestate = this.GAMESTATE.GAMEOVER
+        this.gamestate = System.GAMESTATE.GAMEOVER
         this.timer?.stop()
     }
 
@@ -57,11 +59,11 @@ export default class System{
     }
 
     /** @return {boolean} */
-    isPlay(){ return this.gamestate === this.GAMESTATE.PLAY; }
+    isPlay(){ return this.gamestate === System.GAMESTATE.PLAY; }
     /** @return {boolean} */
-    isStop(){ return this.gamestate === this.GAMESTATE.STOP; }
+    isStop(){ return this.gamestate === System.GAMESTATE.STOP; }
     /** @return {boolean} */
-    isPause(){ return this.gamestate === this.GAMESTATE.PAUSE; }
+    isPause(){ return this.gamestate === System.GAMESTATE.PAUSE; }
     /** @return {boolean} */
-    isGameOver(){ return this.gamestate === this.GAMESTATE.GAMEOVER; }
+    isGameOver(){ return this.gamestate === System.GAMESTATE.GAMEOVER; }
 }
