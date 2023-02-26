@@ -22,9 +22,9 @@ export default class Application extends System{
         getResult()
     }
 
-    screen(nameScreen){
-        const screen = document.querySelector(`.screen-element[name='${nameScreen}']`)
-        if(screen) screen.setAttribute("state", "open")
+    screen(name, state = "open"){
+        const screen = document.querySelector(`.screen-element[name='${name}']`)
+        if(screen) screen.setAttribute("data-state", state)
         return screen
     }
 
