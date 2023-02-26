@@ -5,12 +5,13 @@ export default class System{
         this.GAMESTATE = { PLAY: "play", STOP: "stop", PAUSE: "pause", GAMEOVER: "gameover" }
         this.gamestate = this.GAMESTATE.PLAY
         this.timerStamp = timerStamp
+        this.#_()
+    }
 
-        new Promise((resolve, reject) => setTimeout(() => { resolve(this) }, 250))
-            .then((g) => this.Awake(g) )
-            .then((g) => this.Start(g) )
-            .then((g) => this.timer = new Timer(() => {this.Update()}, this.timerStamp) )
-            .catch(error => console.error(error))
+    async #_(){
+        await this.Awake()
+        await this.Start()
+        this.timer = new Timer(() => { this.Update() }, this.timerStamp)
     }
 
     getState(){ return this.gamestate }
