@@ -31,8 +31,10 @@ export default class Canvas extends System{
 
     Update(){
         super.Update()
-        if(this.autorefresh && this.context) this.context.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight)
-        if(this.context) this.Draw()
+        if(this.context){
+            if(this.autorefresh) this.context.clearRect(0, 0, this.canvas.clientWidth, this.canvas.clientHeight)
+            this.Draw()
+        }
     }
 
     Draw(){}
