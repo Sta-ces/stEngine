@@ -259,7 +259,7 @@ function isMobileAndTablet() {
 function sender({action, params = "", method = "POST", type = "text/html"}, callback) {
     let xhr = new XMLHttpRequest()
     xhr.onreadystatechange = function () {
-        if (this.readyState === xhr.DONE && this.status === xhr.OK) callback(this.responseText)
+        if (this.readyState === xhr.DONE && this.status === 200) callback(this.responseText)
     }
     xhr.open(method, action, true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
