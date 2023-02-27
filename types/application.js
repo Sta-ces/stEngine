@@ -17,9 +17,9 @@ export default class Application extends System{
         const result = fetch(url).then(response => { return response.text() })
         const getResult = async () => {
             container.innerHTML = await result
-            if(callback !== null) callback(container)
         }
         getResult()
+        if(callback !== null) callback(container)
     }
 
     screen(name, state = "open"){
