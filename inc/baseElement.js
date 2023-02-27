@@ -53,7 +53,7 @@ export default class BaseElement extends HTMLElement{
     }
 
     create({element = "div", classname = "", id = "", src = "", alt = "", data = "", type = "", attr = {}, parent = this, textContent = null, append = true}){
-        Shapes.HTML({element, classname, id, src, alt, data, type, attr, parent, textContent, append})
+        return Shapes.HTML({element, classname, id, src, alt, data, type, attr, parent, textContent, append})
     }
 
     Awake(){}
