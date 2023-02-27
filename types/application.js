@@ -29,6 +29,6 @@ export default class Application extends System{
     }
 
     create({element = "div", classname = "", id = "", src = "", alt = "", data = "", type = "", attr = {}, parent = null, textContent = null, append = true}){
-        Shapes.HTML({element, classname, id, src, alt, data, type, attr, parent, textContent, append})
+        return Shapes.HTML({element, classname, id, src, alt, data, type, attr, parent, textContent, append})
     }
 }
