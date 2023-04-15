@@ -39,8 +39,8 @@ export default class BaseElement extends HTMLElement{
         return (this.hasAttribute(attr)) ? this.getAttribute(attr) : defaultValue;
     }
 
-    setAttr(attr, value){
-        if(this.hasAttribute(attr)){
+    setAttr(attr, value, forced = false){
+        if(this.hasAttribute(attr) || forced){
             this.setAttribute(attr, value);
         }
     }
