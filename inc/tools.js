@@ -2,11 +2,11 @@
 if(!Window.prototype.hasOwnProperty("action"))
     Window.prototype.action = function(event, callback, options = false){ addEventListener(event, callback, options); return callback }
 if(!HTMLElement.prototype.hasOwnProperty("action"))
-    HTMLElement.prototype.action = function(event, callback, options) { if(!this) return null; this.addEventListener(event, callback, options); return callback }
+    HTMLElement.prototype.action = function(event, callback, options = false) { if(!this) return null; this.addEventListener(event, callback, options); return callback }
 if(!NodeList.prototype.hasOwnProperty("action"))
-    NodeList.prototype.action = function(event, callback, options) { if(!this.length) return null; Array.from(this).action(event, callback, options); return callback }
+    NodeList.prototype.action = function(event, callback, options = false) { if(!this.length) return null; Array.from(this).action(event, callback, options); return callback }
 if(!Array.prototype.hasOwnProperty("action"))
-    Array.prototype.action = function(event, callback, options) { if(!this.length) return null; this.map(t => { t.action(event, callback, options) }); return callback }
+    Array.prototype.action = function(event, callback, options = false) { if(!this.length) return null; this.map(t => { t.action(event, callback, options) }); return callback }
 if(!Window.prototype.hasOwnProperty("noaction"))
     Window.prototype.noaction = function(event, callback = () => {}, options = false, element = document){ element.removeEventListener(event, callback, options) }
 if(!HTMLElement.prototype.hasOwnProperty("noaction"))
