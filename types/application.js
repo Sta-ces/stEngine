@@ -14,12 +14,11 @@ export default class Application extends System{
 
     render({url, container}, callback = null){
         if(!container || !url) return null
-        const result = fetch(url).then(response => { return response.text() })
-        const getResult = async () => {
+        const result = await fetch(url).then(response => { return response.text() })
+        const getResult = (async () => {
             container.innerHTML = await result
             if(callback !== null) callback(container)
-        }
-        getResult()
+        })()
     }
 
     screen(name, state = "open"){
