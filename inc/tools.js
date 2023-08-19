@@ -152,6 +152,10 @@ if(!NodeList.prototype.hasOwnProperty("html"))
     NodeList.prototype.html = function(txt){ this.forEach(el => el.html(txt)) }
 
 Number.prototype.between = function(a, b) {
+    return Math.min(Math.max(this,a),b)
+}
+
+Number.prototype.isbetween = function(a, b) {
     let min = Math.min.apply(Math, [a, b]), max = Math.max.apply(Math, [a, b])
     return this > min && this < max
 }
