@@ -271,12 +271,11 @@ function sender({action, params = "", method = "POST", type = "text/html"}, call
 
 function loadView({url, container}, callback = null){
     if(!container || !url) return null
-    const result = fetch(url).then(response => { return response.text() })
-    const getResult = async () => {
+    const result = await fetch(url).then(response => { return response.text() })
+    const getResult = (async () => {
         container.innerHTML = await result
         if(callback !== null) callback(container)
-    }
-    getResult()
+    })()
 }
 
 function clog(msg){ console.log(msg) }
