@@ -37,16 +37,14 @@ if(!Window.prototype.hasOwnProperty("getQueries")){
     Window.prototype.getQueries = function(query, toArray = false){
         if(query === "") return null
         let el = document.querySelectorAll(query)
-        if(toArray) return Array.from(el)
-        return el
+        return (toArray) ? Array.from(el) : el;
     }
 }
 if(!HTMLElement.prototype.hasOwnProperty("getQueries")){
     HTMLElement.prototype.getQueries = function(query, toArray = false){
         if(query === "") return null
         let el = this.querySelectorAll(query)
-        if(toArray) return Array.from(el)
-        return el
+        return (toArray) ? Array.from(el) : el;
     }
 }
 if(!NodeList.prototype.hasOwnProperty("getQueries")){
