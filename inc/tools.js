@@ -269,7 +269,7 @@ function sender({action, params = "", method = "POST", type = "text/html"}, call
     xhr.send(params)
 }
 
-function loadView({url, container}, callback = null){
+async function loadView({url, container}, callback = null){
     if(!container || !url) return null
     const result = await fetch(url).then(response => { return response.text() })
     const getResult = (async () => {
