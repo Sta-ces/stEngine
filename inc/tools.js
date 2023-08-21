@@ -187,7 +187,7 @@ function sArrayRandom(array){ return array[sRandom(array.length-1)] }
 
 function accentReplace(str){ return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "") }
 function aprostReplace(str){ return str.replace(/.\'/g, "") }
-function compressReplace(str){ return aprostReplace(accentReplace(str)).toLowerCase() }
+function compressReplace(str, space = "-"){ return (aprostReplace(accentReplace(str)).toLowerCase()).replace(" ", space) }
 
 HTMLElement.prototype.sInsert = function(position, string) {
     switch (position) {
