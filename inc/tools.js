@@ -143,7 +143,7 @@ if(!NodeList.prototype.hasOwnProperty("appendChild")){
 if(!Array.prototype.hasOwnProperty("loop"))
     Array.prototype.loop = function(callback) { this.forEach(element => callback(element)) }
 if(!NodeList.prototype.hasOwnProperty("loop"))
-    NodeList.prototype.loop = function(callback) { NodeList.from(this).loop(callback) }
+    NodeList.prototype.loop = function(callback) { Array.from(this).loop(callback) }
 if(!HTMLElement.prototype.hasOwnProperty("html"))
     HTMLElement.prototype.html = function(txt){ this.innerHTML = txt }
 if(!NodeList.prototype.hasOwnProperty("html"))
