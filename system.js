@@ -54,7 +54,7 @@ export default class System{
     PlaySound({src, volume = 1}){
         let sound = new Audio();
         sound.src = src;
-        sound.volume = (volume > 1) ? 1 : (volume < 0) ? 0 : volume;
+        sound.volume = Math.min(Math.max(volume,0),1)
         sound.play();
     }
 
