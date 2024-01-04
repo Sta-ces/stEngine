@@ -3,11 +3,11 @@ import System from "../system.js"
 
 export default class Application extends System{
     constructor({customTags = {}, isUpdate = false, timerStamp = 2000}){
-        super({isUpdate, timerStamp})
+        super({timerStamp, isUpdate})
         if(Object.keys(customTags).length > 0){
-            for (const [key, value] of Object.entries(customTags)){
+            for (const [key, elementClass] of Object.entries(customTags)){
                 let final_key = (!key.includes("-")) ? `${key.trim()}-tag` : key.trim()
-                customElements.define(final_key, value)
+                customElements.define(final_key, elementClass)
             }
         }
     }
