@@ -184,6 +184,7 @@ function sMultiRandom(count, max = 1, min = 0){
 }
 
 function sArrayRandom(array){ return array[sRandom(array.length-1)] }
+function sJsonRandom(json){ return json[sArrayRandom(Object.keys(json))] }
 
 function accentReplace(str){ return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "") }
 function aprostReplace(str){ return str.replace(/.\'/g, "") }
