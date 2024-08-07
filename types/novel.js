@@ -1,5 +1,5 @@
 import Application from "../types/application.js"
-import BaseElement from "../inc/baseElement.js"
+import { BaseElement } from "../inc/inc.js"
 
 export default class Novel extends Application{
     constructor({containerID, isUpdate = false, timerStamp = 2000}){

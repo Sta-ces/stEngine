@@ -1,4 +1,4 @@
-import TypingStatistics from "../inc/typingStatistics.js"
+import { TypingStatistics } from "../inc/inc.js"
 import System from "../system.js"
 
 export default class Typing extends System{
