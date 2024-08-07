@@ -149,135 +149,62 @@ if(!HTMLElement.prototype.hasOwnProperty("html"))
 if(!NodeList.prototype.hasOwnProperty("html"))
     NodeList.prototype.html = function(txt){ this.forEach(el => el.html(txt)) }
 
-Number.prototype.between = function(a, b) {
-    return Math.min(Math.max(this,a),b)
-}
-
-Number.prototype.isbetween = function(a, b) {
-    let min = Math.min.apply(Math, [a, b]), max = Math.max.apply(Math, [a, b])
-    return this > min && this < max
-}
-
-Number.prototype.percentage = function({excute = "percentage", max = 100, min = 0, reduce = 0}) {
-    if (Number.isNaN(this) || Number.isNaN(max) || Number.isNaN(min) || Number.isNaN(reduce)) return null;
-    let rslt = null;
-    switch(excute){
-        case "percentage": rslt = valToPerc(this, max, min); break;
-        case "value": rslt = percToVal(this, max, min); break;
-        case "reduce": rslt = reducePerc(this, reduce); break;
+if(!Number.prototype.hasOwnProperty("between"))
+    Number.prototype.between = function(a, b) { return Math.min(Math.max(this,a),b) }
+if(!Number.prototype.hasOwnProperty("isbetween")){
+    Number.prototype.isbetween = function(a, b) {
+        let min = Math.min.apply(Math, [a, b]), max = Math.max.apply(Math, [a, b])
+        return this > min && this < max
     }
-    if(excute != "reduce" && reduce > 0) rslt = reducePerc(rslt, reduce);
-    return rslt;
 }
-
-function sRandom(max = 1, min = 0) {
-    if (isNaN(min) && isNaN(max)) return;
-    min = parseFloat(min); max = parseFloat(max);
-    return Math.round(min + Math.random() * (max - min));
-}
-
-function sMultiRandom(count, max = 1, min = 0){
-    let aRand = []
-    for (let index = 0; index < count; index++)
-        aRand[index] = sRandom(max, min)
-    return aRand;
-}
-
-function sArrayRandom(array){ return array[sRandom(array.length-1)] }
-
-function accentReplace(str){ return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "") }
-function aprostReplace(str){ return str.replace(/.\'/g, "") }
-function compressReplace(str, space = "-"){ return (aprostReplace(accentReplace(str)).toLowerCase()).replace(" ", space) }
-
-HTMLElement.prototype.sInsert = function(position, string) {
-    switch (position) {
-        case "before": case "beforebegin": case "begin":
-        case "start": case "previous":
-            position = "beforebegin"; break;
-
-        case "after": case "afterend":
-        case "end": case "next":
-            position = "afterend"; break;
-
-        case "inbefore": case "instart": case "afterbegin":
-        case "insert": case "insertBefore":
-            position = "afterbegin"; break;
-
-        case "inafter": case "inend": case "beforeend":
-        case "append": case "appendChild": default:
-            position = "beforeend"; break;
+if(!Number.prototype.hasOwnProperty("percentage")){
+    Number.prototype.percentage = function({excute = "percentage", max = 100, min = 0, reduce = 0}) {
+        if (Number.isNaN(this) || Number.isNaN(max) || Number.isNaN(min) || Number.isNaN(reduce)) return null;
+        let rslt = null;
+        switch(excute){
+            case "percentage": rslt = valToPerc(this, max, min); break;
+            case "value": rslt = percToVal(this, max, min); break;
+            case "reduce": rslt = reducePerc(this, reduce); break;
+        }
+        if(excute != "reduce" && reduce > 0) rslt = reducePerc(rslt, reduce);
+        return rslt;
     }
-
-    this.insertAdjacentHTML(position, string.trim())
 }
 
-NodeList.prototype.sInsert = function(position, string) {
-    if (this.length <= 0) return
-    this.forEach(element => element.sInsert(position, string) )
-}
-
-HTMLElement.prototype.sModel = function(elements) {
-    const model = this;
-    model.addEventListener("keyup", () => {
-        if (elements instanceof NodeList) elements.forEach((element) => element.innerHTML = model.value )
-        else elements.innerHTML = model.value
-    })
-}
-
-HTMLElement.prototype.watchAttr = function(nameAttr = "", callback) {
-    let observer = new MutationObserver((mutations) => {
-        mutations.forEach(mutation => {
-            if(mutation.type === "attributes" && (nameAttr === "" || mutation.attributeName === nameAttr))
-                callback(mutation, mutation.attributeName)
-        })
-    })
-    observer.observe(this, { attributes: true })
-}
-
-NodeList.prototype.watchAttr = function(nameAttr = "", callback) {
-    if (this.length <= 0) return
-    this.forEach(element => element.watchAttr(nameAttr, callback))
-}
-
-HTMLElement.prototype.setClassList = function(check, classname) {
-    let action = check ? "add" : "remove"
-    this.classList[action](classname)
-}
-
-NodeList.prototype.setClassList = function(check, classname) {
-    if (this.length <= 0) return
-    this.forEach(element => element.setClassList(check, classname))
-}
-
-if(!String.prototype.hasOwnProperty("toCapitalize"))
-    String.prototype.toCapitalize = function(){ return this.charAt(0).toUpperCase() + this.slice(1); }
-
-function isMobileAndTablet(){ return isMobile() }
-function isMobile(){
-    let check = false
-    (function (a) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true; })(navigator.userAgent || navigator.vendor || window.opera)
-    return check
-}
-
-function sender({action, params = "", method = "POST", type = "text/html"}, callback) {
-    let xhr = new XMLHttpRequest()
-    xhr.onreadystatechange = function () {
-        if (this.readyState === xhr.DONE && this.status === 200) callback(this.responseText)
+if(typeof random !== "function"){
+    function random(max = 1, min = 0) {
+        if (isNaN(min) && isNaN(max)) return;
+        min = parseFloat(min); max = parseFloat(max);
+        return Math.round(min + Math.random() * (max - min));
     }
-    xhr.open(method, action, true);
-    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
-    xhr.type = type
-    xhr.send(params)
 }
+if(typeof sRandom !== "function"){ function sRandom(max = 1, min = 0) { return random(max, min) } } // TO ERASED
 
-async function loadView({url, container}, callback = null){
-    if(!container || !url) return null
-    const result = await fetch(url).then(response => { return response.text() })
-    const getResult = (async () => {
-        container.innerHTML = await result
-        if(callback !== null) callback(container)
-    })()
+if(typeof numbersRandom !== "function"){
+    function numbersRandom(count, max = 1, min = 0){
+        let aRand = []
+        for (let i = 0; i < count; i++)
+            aRand[i] = random(max, min)
+        return aRand;
+    }
 }
+if(typeof sMultiRandom !== "function"){ function sMultiRandom(count, max = 1, min = 0){ return numbersRandom(count, max, min) } } // TO ERASED
+
+if(!Array.prototype.hasOwnProperty("random")){
+    Array.prototype.random = function(count = 1){
+        if(count > 1){
+            let aRand = []
+            for (let i = 0; i < count; i++)
+                aRand[i] = this[random(this.length-1)]
+            return aRand
+        }
+        else return this[random(this.length-1)]
+    }
+}
+if(typeof arrayRandom !== "function")
+    function arrayRandom(array){ return array[random(array.length-1)] }
+if(typeof sArrayRandom !== "function") // TO ERASED
+    function sArrayRandom(array){ return arrayRandom(array) }
 
 let defaultDiacriticsRemovalMap = [
     {'base':'A', 'letters':'\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F'},
@@ -367,35 +294,147 @@ let defaultDiacriticsRemovalMap = [
     {'base':'y','letters':'\u0079\u24E8\uFF59\u1EF3\u00FD\u0177\u1EF9\u0233\u1E8F\u00FF\u1EF7\u1E99\u1EF5\u01B4\u024F\u1EFF'},
     {'base':'z','letters':'\u007A\u24E9\uFF5A\u017A\u1E91\u017C\u017E\u1E93\u1E95\u01B6\u0225\u0240\u2C6C\uA763'}
 ]
-
 let diacriticsMap = {}
 for (let i=0; i < defaultDiacriticsRemovalMap.length; i++){
     let letters = defaultDiacriticsRemovalMap[i].letters
     for (let j=0; j < letters.length; j++)
         diacriticsMap[letters[j]] = defaultDiacriticsRemovalMap[i].base
 }
+if(typeof accentReplace !== "function") // TO ERASED
+    function accentReplace(str){ return accentsReplace(str) }
+if(typeof accentsReplace !== "function")
+    function accentsReplace(str){ return str.replace(/[^\u0000-\u007E]/g, function(a){ return diacriticsMap[a] || a }) }
+if(typeof aprostReplace !== "function")
+    function aprostReplace(str){ return str.replace(/.\'/g, "") }
+if(typeof compressReplace !== "function") // TO ERASED
+    function compressReplace(str, space = "-"){ return (aprostReplace(accentsReplace(str)).toLowerCase()).replace(" ", space) }
 
-function accentsReplace(str){
-    return str.replace(/[^\u0000-\u007E]/g, function(a){ 
-       return diacriticsMap[a] || a
-    })
+if(!HTMLElement.prototype.hasOwnProperty("insert")){
+    HTMLElement.prototype.insert = function(position, string) {
+        switch (position) {
+            case "before": case "beforebegin": case "begin":
+            case "start": case "previous":
+                position = "beforebegin"; break;
+
+            case "after": case "afterend":
+            case "end": case "next":
+                position = "afterend"; break;
+
+            case "inbefore": case "instart": case "afterbegin":
+            case "insert": case "insertBefore":
+                position = "afterbegin"; break;
+
+            case "inafter": case "inend": case "beforeend":
+            case "append": case "appendChild": default:
+                position = "beforeend"; break;
+        }
+
+        this.insertAdjacentHTML(position, string.trim())
+    }
+}
+if(!HTMLElement.prototype.hasOwnProperty("sInsert")){
+    HTMLElement.prototype.sInsert = function(position, string){
+        this.insert(position, string)
+    }
+}
+if(!NodeList.prototype.hasOwnProperty("insert")){
+    NodeList.prototype.insert = function(position, string) {
+        if (this.length <= 0) return
+        this.forEach(element => element.insert(position, string) )
+    }
+}
+if(!NodeList.prototype.hasOwnProperty("sInsert")){
+    NodeList.prototype.sInsert = function(position, string) {
+        if (this.length <= 0) return
+        this.insert(position, string)
+    }
 }
 
-function clog(msg){ console.log(msg) }
-function cwarn(msg){ console.warn(msg) }
-function cerror(msg){ console.error(msg) }
-function ctable(msg){ console.table(msg) }
+if(!HTMLElement.prototype.hasOwnProperty("model")){
+    HTMLElement.prototype.model = function(elements) {
+        const model = this;
+        model.addEventListener("keyup", () => {
+            if (elements instanceof NodeList) elements.forEach((element) => element.innerHTML = model.value )
+            else elements.innerHTML = model.value
+        })
+    }
+}
+if(!HTMLElement.prototype.hasOwnProperty("sModel")){
+    HTMLElement.prototype.sModel = function(elements) { this.model(elements) }
+}
+
+if(!HTMLElement.prototype.hasOwnProperty("watchAttr")){
+    HTMLElement.prototype.watchAttr = function(nameAttr = "", callback) {
+        let observer = new MutationObserver((mutations) => {
+            mutations.forEach(mutation => {
+                if(mutation.type === "attributes" && (nameAttr === "" || mutation.attributeName === nameAttr))
+                    callback(mutation, mutation.attributeName)
+            })
+        })
+        observer.observe(this, { attributes: true })
+    }
+}
+if(!NodeList.prototype.hasOwnProperty("watchAttr")){
+    NodeList.prototype.watchAttr = function(nameAttr = "", callback) {
+        if (this.length <= 0) return
+        this.forEach(element => element.watchAttr(nameAttr, callback))
+    }
+}
+
+if(!String.prototype.hasOwnProperty("toCapitalize"))
+    String.prototype.toCapitalize = function(){ return this.charAt(0).toUpperCase() + this.slice(1); }
+
+if(typeof isMobileAndTablet !== "function")
+    function isMobileAndTablet(){ return isMobile() }
+if(typeof isMobile !== "function"){
+    function isMobile(){
+        let check = false
+        (function (a) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true; })(navigator.userAgent || navigator.vendor || window.opera)
+        return check
+    }
+}
+
+if(typeof sender !== "function"){
+    function sender({action, params = "", method = "POST", type = "text/html"}, callback) {
+        let xhr = new XMLHttpRequest()
+        xhr.onreadystatechange = function () {
+            if (this.readyState === xhr.DONE && this.status === 200) callback(this.responseText)
+        }
+        xhr.open(method, action, true);
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded")
+        xhr.type = type
+        xhr.send(params)
+    }
+}
+
+if(typeof loadView !== "function"){
+    async function loadView({url, container}, callback = null){
+        if(!container || !url) return null
+        const result = await fetch(url).then(response => { return response.text() })
+        const getResult = (async () => {
+            container.innerHTML = await result
+            if(callback !== null) callback(container)
+        })()
+    }
+}
+
+if(typeof clog !== "function") function clog(msg){ console.log(msg) }
+if(typeof cwarn !== "function") function cwarn(msg){ console.warn(msg) }
+if(typeof cerror !== "function") function cerror(msg){ console.error(msg) }
+if(typeof ctable !== "function") function ctable(msg){ console.table(msg) }
 
 /** PRIVATES */
-function ClassLists(nl){
-    this.add = function(classname){ nl.forEach(el => el.classList.add(classname)) }
-    this.remove = function(classname){ nl.forEach(el => el.classList.remove(classname)) }
-    this.toggle = function(classname){ nl.forEach(el => el.classList.toggle(classname)) }
-    this.contains = function(classname){ return !!Array.from(nl).filter(el => el.classList.contains(classname)).length }
-    this.replace = function(oldClass, newClass){ nl.forEach(el => el.classList.replace(oldClass, newClass)) }
+if(typeof ClassLists !== "function"){
+    function ClassLists(nl){
+        this.add = function(classname){ nl.forEach(el => el.classList.add(classname)) }
+        this.remove = function(classname){ nl.forEach(el => el.classList.remove(classname)) }
+        this.toggle = function(classname){ nl.forEach(el => el.classList.toggle(classname)) }
+        this.contains = function(classname){ return !!Array.from(nl).filter(el => el.classList.contains(classname)).length }
+        this.replace = function(oldClass, newClass){ nl.forEach(el => el.classList.replace(oldClass, newClass)) }
+    }
 }
 
 // NOT PERCENTAGE
-function valToPerc(number, max = 100, min = 0){ return ((number - min) * 100) / (max - min); }
-function percToVal(number, max = 100, min = 0){ return (number * (max - min) / 100) + min; }
-function reducePerc(number, percentage){ return ((100 - percentage) / 100) * number; }
+if(typeof valToPerc !== "function") function valToPerc(number, max = 100, min = 0){ return ((number - min) * 100) / (max - min); }
+if(typeof percToVal !== "function") function percToVal(number, max = 100, min = 0){ return (number * (max - min) / 100) + min; }
+if(typeof reducePerc !== "function") function reducePerc(number, percentage){ return ((100 - percentage) / 100) * number; }
