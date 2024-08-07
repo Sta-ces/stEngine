@@ -383,6 +383,7 @@ function accentsReplace(str){
 function clog(msg){ console.log(msg) }
 function cwarn(msg){ console.warn(msg) }
 function cerror(msg){ console.error(msg) }
+function ctable(msg){ console.table(msg) }
 
 /** PRIVATES */
 function ClassLists(nl){
