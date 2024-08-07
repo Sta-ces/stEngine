@@ -1,4 +1,4 @@
-import Timer from "./inc/timer.js"
+import { Timer } from "./inc/inc.js"
 
 export default class System{
     static GAMESTATE = { PLAY: "play", STOP: "stop", PAUSE: "pause", GAMEOVER: "gameover" }
