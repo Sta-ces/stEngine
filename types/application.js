@@ -23,6 +23,7 @@ export default class Application extends System{
 
     screen(name, state = "open"){
         const screen = document.querySelector(`.screen-element[name='${name}']`)
+        if(typeof state == "boolean"){ state = state ? "open" : "close" }
         if(screen) screen.setAttribute("data-state", state)
         return screen
     }

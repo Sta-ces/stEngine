@@ -1,4 +1,3 @@
-/** PROTOTYPES */
 if(!Window.prototype.hasOwnProperty("action"))
     Window.prototype.action = function(event, callback, options = false){ addEventListener(event, callback, options); return callback }
 if(!HTMLElement.prototype.hasOwnProperty("action"))
@@ -157,6 +156,7 @@ if(!Number.prototype.hasOwnProperty("isbetween")){
         return this > min && this < max
     }
 }
+
 if(!Number.prototype.hasOwnProperty("percentage")){
     Number.prototype.percentage = function({excute = "percentage", max = 100, min = 0, reduce = 0}) {
         if (Number.isNaN(this) || Number.isNaN(max) || Number.isNaN(min) || Number.isNaN(reduce)) return null;
