@@ -5,7 +5,9 @@ The aim of this Javascript Game Engine is to provide a simple library for web de
 
 ## Installation
 ### Clone
-You can clone this [repository](https://github.com/Sta-ces/stEngine) and import the files by your own way
+You can clone this [repository](https://github.com/Sta-ces/stEngine) and import the files by your own way.<br>
+<em>Recommended if you don't make lot of updates.</em>
+
 ### Import
 Or import the system file directly in your module script :
 ```javascript
