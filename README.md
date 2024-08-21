@@ -13,7 +13,7 @@ import System from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/system.js'
 ```
 If you want to import all the inc classes (not include tools.js) :
 ```javascript
-import * from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/inc/inc.js'
+import * as INC from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/inc/inc.js'
 ```
 If you want to import the Typing system use :
 ```javascript
