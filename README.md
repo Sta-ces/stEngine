@@ -15,6 +15,9 @@ If you want to import all the inc classes (not include tools.js) :
 ```javascript
 import * as INC from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/inc/inc.js'
 ```
+```javascript
+let timer = new INC.Timer(() => {})
+```
 If you want to import the Typing system use :
 ```javascript
 import Typing from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/types/typing.js'
