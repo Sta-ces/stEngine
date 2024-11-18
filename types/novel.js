@@ -11,6 +11,12 @@ export default class Novel extends Application{
         this.container = document.getElementById(containerID)
         this.create({
             element: "character-box",
+            classname: "character-left",
+            parent: this.container
+        })
+        this.create({
+            element: "character-box",
+            classname: "character-right",
             parent: this.container
         })
         this.create({
@@ -25,11 +31,19 @@ export default class Novel extends Application{
 }
 
 class TextBox extends BaseElement{
+    constructor(){
+        super({subtree: true})
+    }
     Awake(){
-        this.create({
+        let dialog = this.create({
             element: "p",
             classname: "dialog"
         })
+    }
+
+    childrenChanged(node, added, removed){
+        super.childrenChanged(node, added, removed)
+        console.log(node)
     }
 }
 

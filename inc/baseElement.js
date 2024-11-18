@@ -1,18 +1,27 @@
 import Shapes from "../inc/shapes.js"
 
 export default class BaseElement extends HTMLElement{
-    constructor(){
+    constructor(options = {}){
         super();
 
         this.options = {
             attributes: true,
-            childList: true
+            childList: true,
+            subtree: false,
+            ...options
         };
         this.observer = new MutationObserver((mutations) => {
             mutations.forEach(mutation => {
-                if(mutation.type == "attributes"){
-                    console.log("Attribute changed");
-                    this.attributesChanged(mutation, mutation.attributeName);
+                console.log(mutation)
+                switch(mutation.type){
+                    case "attributes":
+                        console.log("Attribute changed");
+                        this.attributesChanged(mutation, mutation.attributeName);
+                        break;
+                    case "childList":
+                        console.log("Child changed");
+                        this.childrenChanged(mutation, mutation.addedNodes, mutation.removedNodes);
+                        break;
                 }
             });
         });
@@ -29,9 +38,11 @@ export default class BaseElement extends HTMLElement{
         style.textContent = importCSS + css.replaceAll(" ", "").trim();
         return style;
     }
+
+    watcher(node, options = this.options){ this.observer.observe(node, options); }
     
     connectedCallback(){
-        this.observer.observe(this, this.options);
+        this.watcher(this);
         this.Awake();
     }
 
@@ -48,6 +59,13 @@ export default class BaseElement extends HTMLElement{
     attributesChanged(attr, name){
         if(attr == null || name == null){
             console.error("Attributes error");
+            return;
+        }
+    }
+
+    childrenChanged(node, added, removed){
+        if(node == null){
+            console.error("Children node error");
             return;
         }
     }
