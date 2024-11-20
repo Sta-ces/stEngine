@@ -1,7 +1,7 @@
 <p style="text-align:center;"><img src="https://staces.be/wp-content/uploads/2024/02/Traits.png" width="100" alt="Staces.be"></p>
 
 # stEngine
-The aim of this Javascript Game Engine is to provide a simple library for web developers. stEngine is usefull to create an UI game or the events interface of your game.
+The aim of this Javascript Game Engine is to provide a simple library for web developers. stEngine is usefull to create an UI browser game using HTML as game elements (The tag canvas is still usable).
 
 ## Installation
 ### Clone
