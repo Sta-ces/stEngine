@@ -27,7 +27,7 @@ If you want to import the Typing system use :
 ```javascript
 import Typing from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/types/typing.js'
 ```
-If you want to import all the inc classes (not include tools.js) :
+If you want to import all the inc classes :
 ```javascript
 import * as INC from 'https://cdn.jsdelivr.net/gh/Sta-ces/stEngine/inc/inc.js'
 ```
