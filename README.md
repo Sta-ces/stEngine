@@ -3,7 +3,7 @@
 # stEngine
 The aim of this Javascript Game Engine is to provide a simple library for web developers. stEngine is usefull to create an UI browser game using HTML as game elements (The tag canvas is still usable).
 
-<div style="border:solid red 3px; padding:20px; text-align:center; text-transform:uppercase; font-style:bold;">WARNING: The /inc/tools.js file is moving on this new GitHub project, DON'T use the tools.js file in the stEngine project.</div>
+<p style="border:solid red 3px; padding:20px; text-align:center; text-transform:uppercase; font-style:bold; color: red;">WARNING: The /inc/tools.js file is moving on this new GitHub project, DON'T use the tools.js file in the stEngine project.</p>
 
 ## Installation
 ### Clone
