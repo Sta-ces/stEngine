@@ -91,7 +91,6 @@ export class BaseElement extends HTMLElement{
         };
         this.observer = new MutationObserver((mutations) => {
             mutations.forEach(mutation => {
-                console.log(mutation)
                 switch(mutation.type){
                     case "attributes":
                         console.log("Attribute changed");
@@ -231,6 +230,40 @@ export class Chronometer {
 
     isPlay(){ return this.play }
     setPlay(play){ this.play = play }
+}
+
+export function AutoTyped({ parents, strings, typeSpeed = 10, waiting = 20 }) {
+    if (!strings.length || !parents.length) return null
+    typeSpeed *= 100; waiting *= 100
+    Array.from(parents).map(parent => {
+        let state = 'default'
+        let timer = new Timer(() => {
+            let textLength = parent.textContent.length
+            switch (state) {
+                case 'erased':
+                    if (parent.textContent.length)
+                        parent.textContent = parent.textContent.substr(0, textLength - 1)
+                    else {
+                        state = 'default';
+                        strings.push(strings.shift())
+                    }
+                    break;
+                case 'typed':
+                    if (textLength < strings[0].length)
+                        parent.innerHTML += strings[0].charAt(textLength)
+                    else state = 'default'
+                    break;
+                default:
+                    let timerSystem = new Timer(() => {
+                        state = (parent.textContent.length) ? 'erased' : 'typed'
+                        timer.start()
+                        timerSystem.stop()
+                    }, waiting);
+                    timer.stop()
+                    break;
+            }
+        }, typeSpeed);
+    })
 }
 
 export class SaveManager{

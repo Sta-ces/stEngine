@@ -31,11 +31,12 @@ export default class Novel extends Application{
 }
 
 class TextBox extends BaseElement{
-    constructor(){
-        super({subtree: true})
-    }
+    constructor(){ super({subtree: true}) }
+
+    setDialog(dialog){ this.dialog.textContent = dialog }
+
     Awake(){
-        let dialog = this.create({
+        this.dialog = this.create({
             element: "p",
             classname: "dialog"
         })
@@ -43,8 +44,12 @@ class TextBox extends BaseElement{
 
     childrenChanged(node, added, removed){
         super.childrenChanged(node, added, removed)
-        console.log(node)
+        if(node.target === this.dialog){
+            console.log("ICI")
+        }
     }
+
+    #_showDialog(text){}
 }
 
 class ObjectBox extends BaseElement{}
