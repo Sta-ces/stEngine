@@ -232,38 +232,186 @@ export class Chronometer {
     setPlay(play){ this.play = play }
 }
 
-export function AutoTyped({ parents, strings, typeSpeed = 10, waiting = 20 }) {
-    if (!strings.length || !parents.length) return null
-    typeSpeed *= 100; waiting *= 100
-    Array.from(parents).map(parent => {
-        let state = 'default'
-        let timer = new Timer(() => {
-            let textLength = parent.textContent.length
-            switch (state) {
-                case 'erased':
-                    if (parent.textContent.length)
-                        parent.textContent = parent.textContent.substr(0, textLength - 1)
-                    else {
-                        state = 'default';
-                        strings.push(strings.shift())
-                    }
-                    break;
-                case 'typed':
-                    if (textLength < strings[0].length)
-                        parent.innerHTML += strings[0].charAt(textLength)
-                    else state = 'default'
-                    break;
-                default:
-                    let timerSystem = new Timer(() => {
-                        state = (parent.textContent.length) ? 'erased' : 'typed'
-                        timer.start()
-                        timerSystem.stop()
-                    }, waiting);
-                    timer.stop()
-                    break;
-            }
-        }, typeSpeed);
-    })
+export class AutoTyped {
+    /**
+     * @param {Object} options - Configuration options
+     * @param {Node} options.container - The container element where text will be typed
+     * @param {number} [options.typeSpeed=1] - The typing speed in characters per second (default 1)
+     */
+    constructor({ container, typeSpeed = 1 }) {
+        if (!(container instanceof Node)) {
+            throw new Error("Invalid container: must be a DOM Node.");
+        }
+
+        this.container = container;
+        this.typeSpeed = Math.max(typeSpeed, 0) * 100; // Convert typing speed to milliseconds
+        this.content = "";
+        this.timer = (new Timer(this.#_autotyped.bind(this), this.typeSpeed)).stop();
+
+        // Define states
+        this.STATEMENT = {
+            DEFAULT: "default",
+            ERASED: "erased",
+            TYPED: "typed",
+            FINISHED: "finished",
+        };
+        this.state = this.STATEMENT.DEFAULT;
+
+        // Promise-related handlers
+        this.promiseResolve = null;
+        this.promiseReject = null;
+    }
+
+    /**
+     * Get the current state of the typing animation.
+     * @returns {string} The current state (e.g., "default", "erased", "typed", "finished")
+     */
+    getState(){ return this.state }
+    /**
+     * Get the current timer object.
+     * @returns {Timer} The timer instance controlling the typing speed
+     */
+    getTimer(){ return this.timer }
+    /**
+     * Set a new typing speed.
+     * @param {number} speed - The new typing speed (in characters per second)
+     */
+    setTypeSpeed(speed){
+        this.typeSpeed = Math.max(speed, 0) * 100;
+        this.timer.reset();
+    }
+
+    /**
+     * Set the text content to be typed.
+     * @param {string} content - The text to type
+     * @returns {AutoTyped} The current AutoTyped instance
+     */
+    typed(content) {
+        this.state = this.STATEMENT.TYPED;
+        this.content = content.toString(); // Ensure content is a string
+        return this;
+    }
+
+    /**
+     * Start erasing the text content.
+     * @returns {Promise} A promise that resolves when the text is completely erased
+     */
+    erased() {
+        if (this.container.textContent.length === 0) {
+            throw new Error("AutoTyped: Nothing to erase.");
+        }
+
+        this.state = this.STATEMENT.ERASED;
+
+        return new Promise((resolve, reject) => {
+            this.promiseResolve = resolve;
+            this.promiseReject = reject;
+
+            // Start the erasing process
+            this.timer.start();
+        });
+    }
+
+    /**
+     * Start the typing animation.
+     * @returns {Promise} A promise that resolves when the typing animation is complete
+     */
+    start() {
+        if (this.state !== this.STATEMENT.TYPED) {
+            throw new Error("AutoTyped: Call `typed()` before starting the animation.");
+        }
+
+        // Clear the container's content
+        this.container.textContent = "";
+
+        return new Promise((resolve, reject) => {
+            this.promiseResolve = resolve;
+            this.promiseReject = reject;
+
+            // Start the typing process
+            this.timer.start();
+        });
+    }
+
+    /**
+     * Stop the typing animation and reject the promise.
+     */
+    stop() {
+        this.timer.stop();
+        if (this.promiseReject) {
+            this.promiseReject("Typing animation stopped.");
+            this.promiseReject = null;
+        }
+    }
+
+    /**
+     * Check if the current state is "typed".
+     * @returns {boolean} True if the state is "typed", false otherwise
+     */
+    isTyped(){ return this.state === this.STATEMENT.TYPED }
+    /**
+     * Check if the current state is "erased".
+     * @returns {boolean} True if the state is "erased", false otherwise
+     */
+    isErased(){ return this.state === this.STATEMENT.ERASED }
+    /**
+     * Check if the current state is "finished".
+     * @returns {boolean} True if the state is "finished", false otherwise
+     */
+    isFinished(){ return this.state === this.STATEMENT.FINISHED }
+    /**
+     * Check if the current state is "default".
+     * @returns {boolean} True if the state is "default", false otherwise
+     */
+    isDefault(){ return this.state === this.STATEMENT.DEFAULT }
+
+    /**
+     * Internal method that handles the typing and erasing logic.
+     * @private
+     */
+    #_autotyped() {
+        const textLength = this.container.textContent.length;
+
+        switch (this.state) {
+            case this.STATEMENT.TYPED:
+                if (textLength < this.content.length) {
+                    // Add the next character
+                    this.container.textContent += this.content.charAt(textLength);
+                } else {
+                    // Typing is complete
+                    this.state = this.STATEMENT.FINISHED;
+                    this.#_finish();
+                }
+                break;
+
+            case this.STATEMENT.ERASED:
+                if (textLength > 0) {
+                    // Remove the last character
+                    this.container.textContent = this.container.textContent.slice(0, -1);
+                } else {
+                    // Erasing is complete
+                    this.state = this.STATEMENT.FINISHED;
+                    this.#_finish();
+                }
+                break;
+
+            default:
+                this.stop();
+                break;
+        }
+    }
+
+    /**
+     * Finish the animation (typing or erasing) and resolve the promise.
+     * @private
+     */
+    #_finish() {
+        this.timer.stop();
+        if (this.promiseResolve) {
+            this.promiseResolve();
+            this.promiseResolve = null;
+        }
+    }
 }
 
 export class SaveManager{
