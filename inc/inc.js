@@ -93,11 +93,9 @@ export class BaseElement extends HTMLElement{
             mutations.forEach(mutation => {
                 switch(mutation.type){
                     case "attributes":
-                        console.log("Attribute changed");
                         this.attributesChanged(mutation, mutation.attributeName);
                         break;
                     case "childList":
-                        console.log("Child changed");
                         this.childrenChanged(mutation, mutation.addedNodes, mutation.removedNodes);
                         break;
                 }
