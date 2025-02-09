@@ -54,6 +54,9 @@ class TextBox extends BaseElement{
         this.setAttribute("namecharacter", nameCharacter)
         this.typed?.typed(dialog).start()
     }
+    finishDialog(dialog){
+        this.dialog.textContent = dialog
+    }
 
     getTyped(){ return this.typed }
     isTyped(){ return this.typed?.isTyped() }
