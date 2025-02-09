@@ -236,13 +236,14 @@ export class AutoTyped {
      * @param {Node} options.container - The container element where text will be typed
      * @param {number} [options.typeSpeed=1] - The typing speed in characters per second (default 1)
      */
-    constructor({ container, typeSpeed = 1000 }) {
+    constructor({ container, typeSpeed = 1000, typingEvent = () => {} }) {
         if (!(container instanceof Node)) {
             throw new Error("Invalid container: must be a DOM Node.");
         }
 
         this.container = container;
         this.typeSpeed = Math.max(typeSpeed, 0);
+        this.typingEvent = typingEvent;
         this.content = "";
         this.timer = (new Timer(this.#_autotyped.bind(this), this.typeSpeed)).stop();
 
@@ -375,6 +376,7 @@ export class AutoTyped {
                 if (textLength < this.content.length) {
                     // Add the next character
                     this.container.textContent += this.content.charAt(textLength);
+                    this.typingEvent();
                 } else {
                     // Typing is complete
                     this.state = this.STATEMENT.FINISHED;
@@ -386,6 +388,7 @@ export class AutoTyped {
                 if (textLength > 0) {
                     // Remove the last character
                     this.container.textContent = this.container.textContent.slice(0, -1);
+                    this.typingEvent();
                 } else {
                     // Erasing is complete
                     this.state = this.STATEMENT.FINISHED;
@@ -551,4 +554,19 @@ export class TypingStatistics extends Statistics{
     addFindingWords(){ this.findingWords++ }
     getTappedLetter(){ return this.tappedLetter }
     addTappedLetter(){ this.tappedLetter++ }
+}
+
+export class Random{
+    get(max = 1, min = 0){
+        if (isNaN(min) && isNaN(max)) return;
+        min = parseFloat(min); max = parseFloat(max);
+        return Math.round(min + Math.random() * (max - min));
+    }
+    gets(count, max = 1, min = 0){
+        let aRand = []
+        for (let i = 0; i < count; i++)
+            aRand[i] = this.get(max, min)
+        return aRand;
+    }
+    array(array){ return array[this.get(array.length-1)] }
 }

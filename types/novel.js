@@ -1,18 +1,20 @@
 import Application from "../types/application.js"
-import { BaseElement, AutoTyped } from "../inc/inc.js"
+import { BaseElement, AutoTyped, Random } from "../inc/inc.js"
 
 export default class Novel extends Application{
+    static SFX = {typings: []}
     /**
      * @param {Object} options - Configuration options
      * @param {string} options.containerID - The container ID element where game will appear
      */
-    constructor({containerID, isUpdate = false, timerStamp = 2000, isDev = false}){
+    constructor({containerID, typingSFX = [], isUpdate = false, timerStamp = 2000, isDev = false}){
         super({customTags: {
             "text-box": TextBox,
             "object-box": ObjectBox,
             "character-box": CharacterBox
         }, isUpdate, timerStamp, isDev})
         this.container = document.getElementById(containerID)
+        Novel.SFX.typings = typingSFX
     }
     /**
      * @param {string} classname - Add a classname to your new HTML element
@@ -57,6 +59,11 @@ class TextBox extends BaseElement{
     finishDialog(dialog){
         this.dialog.textContent = dialog
     }
+    typingSound(){
+        let randomSound = (new Random()).array(Novel.SFX.typings)
+        console.log(randomSound)
+        // PlaySound() in system.js to inc.js
+    }
 
     getTyped(){ return this.typed }
     isTyped(){ return this.typed?.isTyped() }
@@ -72,7 +79,7 @@ class TextBox extends BaseElement{
             element: "p",
             classname: "dialog"
         })
-        this.typed = new AutoTyped({ container: this.dialog })
+        this.typed = new AutoTyped({ container: this.dialog, typingEvent: this.typingSound.bind(this) })
     }
 }
 
