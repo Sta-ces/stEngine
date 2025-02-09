@@ -49,11 +49,13 @@ export default class Novel extends Application{
 class TextBox extends BaseElement{
     constructor(){ super({subtree: true}) }
 
-    setDialog(dialog){
+    setDialog(dialog, nameCharacter){
+        this.setAttribute("namecharacter", nameCharacter)
         this.typed.typed(dialog).start()
     }
 
     Awake(){
+        this.setAttribute("namecharacter", "")
         this.dialog = this.create({
             element: "p",
             classname: "dialog"
