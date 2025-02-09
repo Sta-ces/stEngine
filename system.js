@@ -3,7 +3,7 @@ import { Timer } from "./inc/inc.js"
 export default class System{
     static GAMESTATE = { PLAY: "play", STOP: "stop", PAUSE: "pause", GAMEOVER: "gameover" }
 
-    constructor({timerStamp = 50, isUpdate = true}){
+    constructor({timerStamp = 50, isUpdate = true, isDev = false}){
         this.gamestate = System.GAMESTATE.PLAY
         this.timerStamp = timerStamp
         this.#_(isUpdate)
