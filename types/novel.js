@@ -1,5 +1,5 @@
 import Application from "../types/application.js"
-import { BaseElement } from "../inc/inc.js"
+import { BaseElement, AutoTyped } from "../inc/inc.js"
 
 export default class Novel extends Application{
     /**
@@ -20,19 +20,19 @@ export default class Novel extends Application{
     /**
      * @param {string} classname - Add a classname to your new HTML element
      * @param {Node} [parent=container] - Specify the HTML Element
-     * @returns {Node}
+     * @returns {TextBox}
      */
     addTextBox(classname = "", parent = this.container){ return this.create({ element: "text-box", classname, parent }) }
     /**
      * @param {string} classname - Add a classname to your new HTML element
      * @param {Node} [parent=container] - Specify the HTML Element
-     * @returns {Node}
+     * @returns {CharacterBox}
      */
     addCharacterBox(classname = "", parent = this.container){ return this.create({ element: "character-box", classname, parent }) }
     /**
      * @param {string} classname - Add a classname to your new HTML element
      * @param {Node} [parent=container] - Specify the HTML Element
-     * @returns {Node}
+     * @returns {ObjectBox}
      */
     addObjectBox(classname = "", parent = this.container){ return this.create({ element: "object-box", classname, parent }) }
     /**
@@ -49,23 +49,19 @@ export default class Novel extends Application{
 class TextBox extends BaseElement{
     constructor(){ super({subtree: true}) }
 
-    setDialog(dialog){ this.dialog.textContent = dialog }
+    setDialog(dialog){
+        this.typed.typed(dialog).start()
+    }
 
     Awake(){
         this.dialog = this.create({
             element: "p",
             classname: "dialog"
         })
+        this.typed = new AutoTyped({
+            container: this.dialog
+        })
     }
-
-    childrenChanged(node, added, removed){
-        super.childrenChanged(node, added, removed)
-        if(node.target === this.dialog){
-            console.log("ICI")
-        }
-    }
-
-    #_showDialog(text){}
 }
 
 class ObjectBox extends BaseElement{}
