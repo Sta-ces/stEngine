@@ -46,10 +46,22 @@ export default class Novel extends Application{
 class TextBox extends BaseElement{
     constructor(){ super({subtree: true}) }
 
+    /**
+     * @param {string} dialog 
+     * @param {string} nameCharacter 
+     */
     setDialog(dialog, nameCharacter){
         this.setAttribute("namecharacter", nameCharacter)
-        this.typed.typed(dialog).start()
+        this.typed?.typed(dialog).start()
     }
+
+    getTyped(){ return this.typed }
+    isTyped(){ return this.typed?.isTyped() }
+    isFinished(){ return this.typed?.isFinished() }
+    /**
+     * @param {number} speed - Speed in second of the displaying text
+     */
+    setTypeSpeed(speed){ this.typed?.setTypeSpeed(speed) }
 
     Awake(){
         this.setAttribute("namecharacter", "")
@@ -57,9 +69,7 @@ class TextBox extends BaseElement{
             element: "p",
             classname: "dialog"
         })
-        this.typed = new AutoTyped({
-            container: this.dialog
-        })
+        this.typed = new AutoTyped({ container: this.dialog })
     }
 }
 

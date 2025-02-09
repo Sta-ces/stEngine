@@ -238,13 +238,13 @@ export class AutoTyped {
      * @param {Node} options.container - The container element where text will be typed
      * @param {number} [options.typeSpeed=1] - The typing speed in characters per second (default 1)
      */
-    constructor({ container, typeSpeed = 1 }) {
+    constructor({ container, typeSpeed = 1000 }) {
         if (!(container instanceof Node)) {
             throw new Error("Invalid container: must be a DOM Node.");
         }
 
         this.container = container;
-        this.typeSpeed = Math.max(typeSpeed, 0) * 100; // Convert typing speed to milliseconds
+        this.typeSpeed = Math.max(typeSpeed, 0);
         this.content = "";
         this.timer = (new Timer(this.#_autotyped.bind(this), this.typeSpeed)).stop();
 
@@ -277,8 +277,8 @@ export class AutoTyped {
      * @param {number} speed - The new typing speed (in characters per second)
      */
     setTypeSpeed(speed){
-        this.typeSpeed = Math.max(speed, 0) * 100;
-        this.timer.reset();
+        this.typeSpeed = Math.max(speed, 0);
+        this.timer.reset(this.typeSpeed);
     }
 
     /**
