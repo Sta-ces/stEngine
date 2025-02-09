@@ -2,8 +2,8 @@ import { Shapes } from "../inc/inc.js"
 import System from "../system.js"
 
 export default class Application extends System{
-    constructor({customTags = {}, isUpdate = false, timerStamp = 2000}){
-        super({timerStamp, isUpdate})
+    constructor({customTags = {}, isUpdate = false, timerStamp = 2000, isDev = false}){
+        super({timerStamp, isUpdate, isDev})
         if(Object.keys(customTags).length > 0){
             for (const [key, elementClass] of Object.entries(customTags)){
                 let final_key = (!key.includes("-")) ? `${key.trim()}-tag` : key.trim()

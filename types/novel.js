@@ -6,12 +6,12 @@ export default class Novel extends Application{
      * @param {Object} options - Configuration options
      * @param {string} options.containerID - The container ID element where game will appear
      */
-    constructor({containerID, isUpdate = false, timerStamp = 2000}){
+    constructor({containerID, isUpdate = false, timerStamp = 2000, isDev = false}){
         super({customTags: {
             "text-box": TextBox,
             "object-box": ObjectBox,
             "character-box": CharacterBox
-        }, isUpdate, timerStamp})
+        }, isUpdate, timerStamp, isDev})
         this.container = document.getElementById(containerID)
     }
     /**
