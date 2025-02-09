@@ -6,6 +6,7 @@ export default class System{
     constructor({timerStamp = 50, isUpdate = true, isDev = false}){
         this.gamestate = System.GAMESTATE.PLAY
         this.timerStamp = timerStamp
+        this.isDev = isDev
         this.#_(isUpdate)
     }
 
