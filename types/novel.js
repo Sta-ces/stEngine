@@ -1,5 +1,5 @@
 import Application from "../types/application.js"
-import { BaseElement, AutoTyped, Random } from "../inc/inc.js"
+import { BaseElement, AutoTyped, Random, Sound } from "../inc.js"
 
 export default class Novel extends Application{
     static SFX = {typings: []}
@@ -61,8 +61,7 @@ class TextBox extends BaseElement{
     }
     typingSound(){
         let randomSound = (new Random()).array(Novel.SFX.typings)
-        console.log(randomSound)
-        // PlaySound() in system.js to inc.js
+        Sound.play(randomSound)
     }
 
     getTyped(){ return this.typed }

@@ -1,4 +1,4 @@
-import { Shapes } from "../inc/inc.js"
+import { Shapes } from "../inc.js"
 import System from "../system.js"
 
 export default class Application extends System{

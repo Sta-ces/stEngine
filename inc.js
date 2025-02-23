@@ -570,3 +570,23 @@ export class Random{
     }
     array(array){ return array[this.get(array.length-1)] }
 }
+
+export class Sound{
+    /**
+    * @param {string} src - path of the audio file
+    * @param {number} [volume=1] - Sound level [between 0-1]
+    * @returns {Promise<Audio>}
+    */
+    static async play(src, volume = 1) {
+        try {
+            const sound = new Audio();
+            sound.src = src;
+            sound.volume = Math.min(Math.max(volume, 0), 1);
+            await sound.play();
+            return sound;
+        } catch (error) {
+            console.warn('Audio playback failed:', error);
+            throw error;
+        }
+    }
+}

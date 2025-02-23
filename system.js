@@ -1,4 +1,4 @@
-import { Timer } from "./inc/inc.js"
+import { Timer, Sound } from "./inc.js"
 
 export default class System{
     static GAMESTATE = { PLAY: "play", STOP: "stop", PAUSE: "pause", GAMEOVER: "gameover" }
@@ -52,12 +52,7 @@ export default class System{
         this.timer?.stop()
     }
 
-    PlaySound({src, volume = 1}){
-        let sound = new Audio();
-        sound.src = src;
-        sound.volume = Math.min(Math.max(volume,0),1)
-        sound.play();
-    }
+    PlaySound({src, volume = 1}){ Sound.play(src, volume) }
 
     /** @return {boolean} */
     isPlay(){ return this.gamestate === System.GAMESTATE.PLAY; }
