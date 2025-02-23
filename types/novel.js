@@ -46,6 +46,8 @@ export default class Novel extends Application{
 }
 
 class TextBox extends BaseElement{
+    currentSound = null;
+
     constructor(){ super({subtree: true}) }
 
     /**
@@ -59,9 +61,12 @@ class TextBox extends BaseElement{
     finishDialog(dialog){
         this.dialog.textContent = dialog
     }
-    typingSound(){
+    async typingSound(){
+        // Stop if currentSound is playing
+        if (this.currentSound?.paused === false) return;
+
         let randomSound = (new Random()).array(Novel.SFX.typings)
-        Sound.play(randomSound)
+        this.currentSound = await Sound.play(randomSound)
     }
 
     getTyped(){ return this.typed }
