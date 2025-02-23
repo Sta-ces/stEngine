@@ -36,8 +36,8 @@ let timer = new INC.Timer(() => {})
 ```
 
 ## Demos
-- [Typing game](https://clavite.staces.be/)
-- Quizz (not finished yet)
+- [Typing game](https://games.grumpygreen.be/clavite/)
+- [Clicker game](https://games.grumpygreen.be/zeventclicker/)
 
 ## Author
 - [Cedric Staces](https://staces.be/)
