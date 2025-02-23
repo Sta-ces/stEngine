@@ -524,22 +524,36 @@ export class Statistics{
         this.errors = 0
     }
 
+    /** Get the combos stat */
     getCombos(){ return this.combos }
+    /** Set the combos stat */
     setCombos(comb){ this.combos = comb }
+    /** Increase the combos stat */
     addCombos(comb = 1){ this.combos += comb; this.setMaxCombo() }
+    /** Dicrease the combos stat */
     lessCombos(comb = 1){ this.combos -= comb }
 
+    /** Get the max combo stat */
     getMaxCombo(){ return this.maxcombo }
+    /** Set the max combo stat */
     setMaxCombo(){ if(this.combo > this.maxcombo) this.maxcombo = this.combo }
 
+    /** Get the success stat */
     getSuccess(){ return this.success }
+    /** Set the success stat */
     setSuccess(succ){ this.success = succ }
+    /** Increase the success stat */
     addSuccess(succ = 1){ this.success += succ }
+    /** Dicrease the success stat */
     lessSuccess(succ = 1){ this.success -= succ }
 
+    /** Get the errors stat */
     getErrors(){ return this.errors }
+    /** Set the errors stat */
     setErrors(err){ this.errors = err }
+    /** Increase the errors stat */
     addErrors(err = 1){ this.errors += err }
+    /** Dicrease the errors stat */
     lessErrors(err = 1){ this.errors -= err }
 }
 
@@ -550,24 +564,43 @@ export class TypingStatistics extends Statistics{
         this.tappedLetter = 0
     }
 
+    /** Get the finding letter stat */
     getFindingWords(){ return this.findingWords }
+    /** Increment the finding letter stat */
     addFindingWords(){ this.findingWords++ }
+    /** Get the tapped letter stat */
     getTappedLetter(){ return this.tappedLetter }
+    /** Increment the tapped letter stat */
     addTappedLetter(){ this.tappedLetter++ }
 }
 
 export class Random{
+    /**
+     * @param {number} max 
+     * @param {number} min 
+     * @returns {number}
+     */
     get(max = 1, min = 0){
         if (isNaN(min) && isNaN(max)) return;
         min = parseFloat(min); max = parseFloat(max);
         return Math.round(min + Math.random() * (max - min));
     }
+    /**
+     * @param {number} count - Number of interation you want
+     * @param {number} max 
+     * @param {number} min 
+     * @returns {number[]}
+     */
     gets(count, max = 1, min = 0){
         let aRand = []
         for (let i = 0; i < count; i++)
             aRand[i] = this.get(max, min)
         return aRand;
     }
+    /**
+     * @param {array} array
+     * @returns
+     */
     array(array){ return array[this.get(array.length-1)] }
 }
 
