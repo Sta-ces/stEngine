@@ -23,11 +23,13 @@ export default class Novel extends Application{
      */
     addTextBox(classname = "", parent = this.container){ return this.create({ element: "text-box", classname, parent }) }
     /**
-     * @param {string} classname - Add a classname to your new HTML element
+     * @param {string} src - Image path
+     * @param {string} [classname=""] - Add a classname to your new HTML element
+     * @param {boolean} [flip=false] - true|false to flip on the X side
      * @param {Node} [parent=container] - Specify the HTML Element
      * @returns {CharacterBox}
      */
-    addCharacterBox(classname = "", parent = this.container){ return this.create({ element: "character-box", classname, parent }) }
+    addCharacterBox(src, classname = "", flip = false, parent = this.container){ return this.create({ element: "character-box", classname, parent, src, attr: { flip } }) }
     /**
      * @param {string} classname - Add a classname to your new HTML element
      * @param {Node} [parent=container] - Specify the HTML Element
@@ -48,6 +50,12 @@ export default class Novel extends Application{
 class TextBox extends BaseElement{
     currentSound = null;
 
+    get speed(){ return this.typed.typeSpeed }
+    get nameCharacter(){ return this.getAttribute("namecharacter") }
+
+    set speed(speed){ this.typed?.setTypeSpeed(speed) }
+    set nameCharacter(nc){ this.setAttribute("namecharacter", nc) }
+
     constructor(){ super({subtree: true}) }
 
     /**
@@ -55,7 +63,7 @@ class TextBox extends BaseElement{
      * @param {string} nameCharacter 
      */
     setDialog(dialog, nameCharacter){
-        this.setAttribute("namecharacter", nameCharacter)
+        this.nameCharacter = nameCharacter
         this.typed?.typed(dialog).start()
     }
     finishDialog(dialog){
@@ -72,13 +80,9 @@ class TextBox extends BaseElement{
     getTyped(){ return this.typed }
     isTyped(){ return this.typed?.isTyped() }
     isFinished(){ return this.typed?.isFinished() }
-    /**
-     * @param {number} speed - Speed in second of the displaying text
-     */
-    setTypeSpeed(speed){ this.typed?.setTypeSpeed(speed) }
 
     Awake(){
-        this.setAttribute("namecharacter", "")
+        this.nameCharacter = ""
         this.dialog = this.create({
             element: "p",
             classname: "dialog"
@@ -89,4 +93,36 @@ class TextBox extends BaseElement{
 
 class ObjectBox extends BaseElement{}
 
-class CharacterBox extends BaseElement{}
+class CharacterBox extends BaseElement{
+    get src(){ return this.getAttribute("src") }
+    get flip(){ return this.getAttribute("flip") === "true" }
+    get flipStyle(){ return this.flip ? 'scaleX(-1)' : 'scaleX(1)'; }
+
+    set src(path){ this.setAttribute("src", path) }
+    set flip(dir){ this.setAttribute("flip", dir.toString()) }
+
+    attributesChanged(attr, name){
+        super.attributesChanged(attr, name)
+        switch(name){
+            case "src":
+                this.character.src = this.src;
+                break;
+            case "flip":
+                this.character.style.transform = this.flipStyle;
+                break;
+        }
+    }
+
+    Awake(){
+        this.style = "width: 25em; height: 50em;"
+        this.character = this.create({
+            element: "img",
+            src: this.src,
+            classname: "character-image",
+            attr: {
+                style: `object-fit: contain; background-position: center bottom; width: 100%; height: 100%; transform: ${this.flipStyle};`
+            },
+            alt: "Character box"
+        })
+    }
+}
