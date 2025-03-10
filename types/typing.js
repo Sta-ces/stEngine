@@ -1,9 +1,9 @@
-import { TypingStatistics } from "../inc/inc.js"
+import { TypingStatistics } from "../inc.js"
 import System from "../system.js"
 
 export default class Typing extends System{
-    constructor({words, lang, limitWord = 3, isUpdate = false, timerStamp = 50}){
-        super({isUpdate, timerStamp})
+    constructor({words, lang, limitWord = 3, isUpdate = false, timerStamp = 50, isDev = false}){
+        super({isUpdate, timerStamp, isDev})
         this.words = (words.length > 0) ? words.filter(word => word["label"].length > limitWord) : []
         this.lang = lang
         this.lastword = ""

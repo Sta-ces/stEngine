@@ -5,8 +5,8 @@ export default class Canvas extends System{
      * canvasid = "canvas"
      * @param {{canvasid?:string, width?:number, height?:number, autostart?:boolean, autorefresh?:boolean}} 
      */
-    constructor({canvasid = "canvas", width = null, height = null, autorefresh = true, isUpdate = true, timerStamp = 50}){
-        super({isUpdate, timerStamp})
+    constructor({canvasid = "canvas", width = null, height = null, autorefresh = true, isUpdate = true, timerStamp = 50, isDev = false}){
+        super({isUpdate, timerStamp, isDev})
         this.canvas = document.getElementById(canvasid)
         this.autorefresh = autorefresh
         if(this.canvas){

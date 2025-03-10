@@ -139,6 +139,19 @@ if(!NodeList.prototype.hasOwnProperty("appendChild")){
         this.forEach(child => child.appendChild(children))
     }
 }
+if(!HTMLElement.prototype.hasOwnProperty("clone")){
+    HTMLElement.prototype.clone = function(container, position = "after"){
+        let node = this;
+        let container = container instanceof Node ? [container] : container;
+        Array.from(container).map( c => {
+            const contentNode = document.importNode(node, true)
+            switch(position){
+                case "before": c.insertBefore(contentNode, c.firstChild); break;
+                case "after": default: c.appendChild(contentNode); break;
+            }
+        } )
+    }
+}
 if(!Array.prototype.hasOwnProperty("loop"))
     Array.prototype.loop = function(callback) { this.forEach(element => callback(element)) }
 if(!NodeList.prototype.hasOwnProperty("loop"))

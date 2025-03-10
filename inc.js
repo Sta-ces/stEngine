@@ -91,14 +91,11 @@ export class BaseElement extends HTMLElement{
         };
         this.observer = new MutationObserver((mutations) => {
             mutations.forEach(mutation => {
-                console.log(mutation)
                 switch(mutation.type){
                     case "attributes":
-                        console.log("Attribute changed");
                         this.attributesChanged(mutation, mutation.attributeName);
                         break;
                     case "childList":
-                        console.log("Child changed");
                         this.childrenChanged(mutation, mutation.addedNodes, mutation.removedNodes);
                         break;
                 }
@@ -233,6 +230,191 @@ export class Chronometer {
     setPlay(play){ this.play = play }
 }
 
+export class AutoTyped {
+    /**
+     * @param {Object} options - Configuration options
+     * @param {Node} options.container - The container element where text will be typed
+     * @param {number} [options.typeSpeed=1] - The typing speed in characters per second (default 1)
+     */
+    constructor({ container, typeSpeed = 1000, typingEvent = () => {} }) {
+        if (!(container instanceof Node)) {
+            throw new Error("Invalid container: must be a DOM Node.");
+        }
+
+        this.container = container;
+        this.typeSpeed = Math.max(typeSpeed, 0);
+        this.typingEvent = typingEvent;
+        this.content = "";
+        this.timer = (new Timer(this.#_autotyped.bind(this), this.typeSpeed)).stop();
+
+        // Define states
+        this.STATEMENT = {
+            DEFAULT: "default",
+            ERASED: "erased",
+            TYPED: "typed",
+            FINISHED: "finished",
+        };
+        this.state = this.STATEMENT.DEFAULT;
+
+        // Promise-related handlers
+        this.promiseResolve = null;
+        this.promiseReject = null;
+    }
+
+    /**
+     * Get the current state of the typing animation.
+     * @returns {string} The current state (e.g., "default", "erased", "typed", "finished")
+     */
+    getState(){ return this.state }
+    /**
+     * Get the current timer object.
+     * @returns {Timer} The timer instance controlling the typing speed
+     */
+    getTimer(){ return this.timer }
+    /**
+     * Set a new typing speed.
+     * @param {number} speed - The new typing speed (in characters per second)
+     */
+    setTypeSpeed(speed){
+        this.typeSpeed = Math.max(speed, 0);
+        this.timer.reset(this.typeSpeed);
+    }
+
+    /**
+     * Set the text content to be typed.
+     * @param {string} content - The text to type
+     * @returns {AutoTyped} The current AutoTyped instance
+     */
+    typed(content) {
+        this.state = this.STATEMENT.TYPED;
+        this.content = content.toString(); // Ensure content is a string
+        return this;
+    }
+
+    /**
+     * Start erasing the text content.
+     * @returns {Promise} A promise that resolves when the text is completely erased
+     */
+    erased() {
+        if (this.container.textContent.length === 0) {
+            throw new Error("AutoTyped: Nothing to erase.");
+        }
+
+        this.state = this.STATEMENT.ERASED;
+
+        return new Promise((resolve, reject) => {
+            this.promiseResolve = resolve;
+            this.promiseReject = reject;
+
+            // Start the erasing process
+            this.timer.start();
+        });
+    }
+
+    /**
+     * Start the typing animation.
+     * @returns {Promise} A promise that resolves when the typing animation is complete
+     */
+    start() {
+        if (this.state !== this.STATEMENT.TYPED) {
+            throw new Error("AutoTyped: Call `typed()` before starting the animation.");
+        }
+
+        // Clear the container's content
+        this.container.textContent = "";
+
+        return new Promise((resolve, reject) => {
+            this.promiseResolve = resolve;
+            this.promiseReject = reject;
+
+            // Start the typing process
+            this.timer.start();
+        });
+    }
+
+    /**
+     * Stop the typing animation and reject the promise.
+     */
+    stop() {
+        this.timer.stop();
+        if (this.promiseReject) {
+            this.promiseReject("Typing animation stopped.");
+            this.promiseReject = null;
+        }
+    }
+
+    /**
+     * Check if the current state is "typed".
+     * @returns {boolean} True if the state is "typed", false otherwise
+     */
+    isTyped(){ return this.state === this.STATEMENT.TYPED }
+    /**
+     * Check if the current state is "erased".
+     * @returns {boolean} True if the state is "erased", false otherwise
+     */
+    isErased(){ return this.state === this.STATEMENT.ERASED }
+    /**
+     * Check if the current state is "finished".
+     * @returns {boolean} True if the state is "finished", false otherwise
+     */
+    isFinished(){ return this.state === this.STATEMENT.FINISHED }
+    /**
+     * Check if the current state is "default".
+     * @returns {boolean} True if the state is "default", false otherwise
+     */
+    isDefault(){ return this.state === this.STATEMENT.DEFAULT }
+
+    /**
+     * Internal method that handles the typing and erasing logic.
+     * @private
+     */
+    #_autotyped() {
+        const textLength = this.container.textContent.length;
+
+        switch (this.state) {
+            case this.STATEMENT.TYPED:
+                if (textLength < this.content.length) {
+                    // Add the next character
+                    this.container.textContent += this.content.charAt(textLength);
+                    this.typingEvent();
+                } else {
+                    // Typing is complete
+                    this.state = this.STATEMENT.FINISHED;
+                    this.#_finish();
+                }
+                break;
+
+            case this.STATEMENT.ERASED:
+                if (textLength > 0) {
+                    // Remove the last character
+                    this.container.textContent = this.container.textContent.slice(0, -1);
+                    this.typingEvent();
+                } else {
+                    // Erasing is complete
+                    this.state = this.STATEMENT.FINISHED;
+                    this.#_finish();
+                }
+                break;
+
+            default:
+                this.stop();
+                break;
+        }
+    }
+
+    /**
+     * Finish the animation (typing or erasing) and resolve the promise.
+     * @private
+     */
+    #_finish() {
+        this.timer.stop();
+        if (this.promiseResolve) {
+            this.promiseResolve();
+            this.promiseResolve = null;
+        }
+    }
+}
+
 export class SaveManager{
     static save(key, value){ localStorage.setItem(key, JSON.stringify(value)) }
     static load(key, default_value = []){
@@ -342,22 +524,36 @@ export class Statistics{
         this.errors = 0
     }
 
+    /** Get the combos stat */
     getCombos(){ return this.combos }
+    /** Set the combos stat */
     setCombos(comb){ this.combos = comb }
+    /** Increase the combos stat */
     addCombos(comb = 1){ this.combos += comb; this.setMaxCombo() }
+    /** Dicrease the combos stat */
     lessCombos(comb = 1){ this.combos -= comb }
 
+    /** Get the max combo stat */
     getMaxCombo(){ return this.maxcombo }
+    /** Set the max combo stat */
     setMaxCombo(){ if(this.combo > this.maxcombo) this.maxcombo = this.combo }
 
+    /** Get the success stat */
     getSuccess(){ return this.success }
+    /** Set the success stat */
     setSuccess(succ){ this.success = succ }
+    /** Increase the success stat */
     addSuccess(succ = 1){ this.success += succ }
+    /** Dicrease the success stat */
     lessSuccess(succ = 1){ this.success -= succ }
 
+    /** Get the errors stat */
     getErrors(){ return this.errors }
+    /** Set the errors stat */
     setErrors(err){ this.errors = err }
+    /** Increase the errors stat */
     addErrors(err = 1){ this.errors += err }
+    /** Dicrease the errors stat */
     lessErrors(err = 1){ this.errors -= err }
 }
 
@@ -368,8 +564,57 @@ export class TypingStatistics extends Statistics{
         this.tappedLetter = 0
     }
 
+    /** Get the finding letter stat */
     getFindingWords(){ return this.findingWords }
+    /** Increment the finding letter stat */
     addFindingWords(){ this.findingWords++ }
+    /** Get the tapped letter stat */
     getTappedLetter(){ return this.tappedLetter }
+    /** Increment the tapped letter stat */
     addTappedLetter(){ this.tappedLetter++ }
+}
+
+export class Random{
+    /**
+     * @param {number} max 
+     * @param {number} min 
+     * @returns {number}
+     */
+    get(max = 1, min = 0){
+        if (isNaN(min) && isNaN(max)) return;
+        min = parseFloat(min); max = parseFloat(max);
+        return Math.round(min + Math.random() * (max - min));
+    }
+    /**
+     * @param {number} count - Number of interation you want
+     * @param {number} max 
+     * @param {number} min 
+     * @returns {number[]}
+     */
+    gets(count, max = 1, min = 0){
+        let aRand = []
+        for (let i = 0; i < count; i++)
+            aRand[i] = this.get(max, min)
+        return aRand;
+    }
+    /**
+     * @param {array} array
+     * @returns
+     */
+    array(array){ return array[this.get(array.length-1)] }
+}
+
+export class Sound{
+    /**
+    * @param {string} src - path of the audio file
+    * @param {number} [volume=1] - Sound level [between 0-1]
+    * @returns {Promise<Audio>}
+    */
+    static async play(src, volume = 1) {
+        const sound = new Audio();
+        sound.src = src;
+        sound.volume = Math.min(Math.max(volume, 0), 1);
+        sound.play().catch(error => console.error('Playback failed:', error));
+        return sound;
+    }
 }
