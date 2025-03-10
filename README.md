@@ -11,6 +11,8 @@ The aim of this Javascript Game Engine is to provide a simple library for web de
 Please use the new CDN link instead:
 [**https://cdn.jsdelivr.net/gh/Sta-ces/dom-tools/tools.min.js**](https://cdn.jsdelivr.net/gh/Sta-ces/dom-tools/tools.min.js)
 
+**WARNING**: The /inc/ folder will be removed from this new GitHub project.
+
 Make sure to update your references to this new location.
 
 ## Installation
