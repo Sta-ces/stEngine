@@ -5,7 +5,7 @@ The aim of this Javascript Game Engine is to provide a simple library for web de
 
 ## ⚠️ Important Warning
 
-**WARNING**: The /inc/ folder will be removed from this new GitHub project.
+**WARNING**: The `/inc/` folder will be removed from this new GitHub project.
 
 **WARNING**: The `/inc/tools.js` file is moving to this new GitHub project.  
 **🚫 DO NOT use the `tools.js` file in the `stEngine` project.**
