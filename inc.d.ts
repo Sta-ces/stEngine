@@ -67,8 +67,8 @@ declare class JSONManager{
     set(param: string, value: string): void;
     getDatas(): Record<string, any>;
 
-    async load(): Promise<void>;
-    async save(): Promise<void>;
+    load(): Promise<void>;
+    save(): Promise<void>;
 
     _request(
         { action, params = "", method = "POST", type = "text/html" }: 
@@ -123,4 +123,4 @@ declare class Sound{
     play(src: string, volume?: number): Promise<AudioBuffer>;
 }
 
-module.exports = { Shapes, BaseElement, Timer, Chronometer, AutoTyped, SaveManager, JSONManager, Score, Statistics, TypingStatistics, Random, Sound }
+export { Shapes, BaseElement, Timer, Chronometer, AutoTyped, SaveManager, JSONManager, Score, Statistics, TypingStatistics, Random, Sound }
