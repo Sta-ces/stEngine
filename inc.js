@@ -184,50 +184,54 @@ export class Timer {
     isStart(){ return this.timerObject != null }
 }
 
-export class Chronometer {
+export class Chronometer extends Timer {
 
-    constructor({parent = null, duration, speed = 1000, play = true, callback_display, callback_end = () => {}}){
+    constructor({parent = null, duration, speed = 1000, play = true, callback_display = null, callback_end = () => {}}){
+        super(null, speed)
         this.duration = duration
         this.parent = parent
         this.callback_display = callback_display
         this.callback_end = callback_end
         this.play = play
-        
-        this.CHRONOSTATE = new Timer(() => {this.#chrono(this)}, speed)
+
+        this.callback = this.#chrono.bind(this)
+        this.timerObject = setInterval(this.callback, this.time)
     }
     
-    #chrono(_CHRONO) {
-        let milliseconds = parseInt(_CHRONO.duration % 60)
-        let seconds = parseInt((_CHRONO.duration / 60) % 60)
-        let minutes = parseInt(((_CHRONO.duration / 60) / 60) % 60)
-        let hours = parseInt(((((_CHRONO.duration / 60) / 60) / 24) % 24))
+    #chrono() {
+        let seconds = Math.floor(this.duration % 60);
+        let minutes = Math.floor((this.duration / 60) % 60);
+        let hours = Math.floor((this.duration / 3600) % 24);
 
-        hours = hours < 10 ? "0" + hours : hours
-        minutes = minutes < 10 ? "0" + minutes : minutes
-        seconds = seconds < 10 ? "0" + seconds : seconds
-        milliseconds = milliseconds < 10 ? "0" + milliseconds : milliseconds
+        hours = hours.toString().padStart(2, "0");
+        minutes = minutes.toString().padStart(2, "0");
+        seconds = seconds.toString().padStart(2, "0");
 
         let obj = {
-            hours: hours,
-            minutes: minutes,
-            seconds: seconds,
-            milliseconds: milliseconds,
-            time: _CHRONO.duration
-        }
+            hours,
+            minutes,
+            seconds,
+            milliseconds: 0,
+            time: this.duration
+        };
 
-        _CHRONO.callback_display(obj, _CHRONO.parent)
+        if(this.callback_display !== null) this.callback_display(obj, this.parent)
 
-        if(_CHRONO.play) _CHRONO.duration--
+        if(this.play) this.duration--
 
-        if (_CHRONO.duration < 0) {
-            _CHRONO.CHRONOSTATE.stop()
-            _CHRONO.callback_end(_CHRONO.CHRONOSTATE, _CHRONO.parent)
-            _CHRONO.play = false
+        if (this.duration < 0) {
+            this.stop()
+            this.callback_end(this, this.parent)
+            this.play = false
         }
     }
 
     isPlay(){ return this.play }
     setPlay(play){ this.play = play }
+    finish(){
+        this.stop()
+        this.play = false
+    }
 }
 
 export class AutoTyped {
