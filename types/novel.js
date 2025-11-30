@@ -1,4 +1,4 @@
-import Application from "../types/application.js"
+import Application from "./application.js"
 import { BaseElement, AutoTyped, Random, Sound } from "../inc.js"
 
 /**
