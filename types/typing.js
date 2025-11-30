@@ -1,5 +1,5 @@
 import EventsKeys from "../eventskeys.js"
-import { TypingStatistics } from "../inc.js"
+import { Random, TypingStatistics } from "../inc.js"
 import System from "../system.js"
 
 export default class Typing extends System{
@@ -38,7 +38,7 @@ export default class Typing extends System{
         if(!this.words.length) return ""
         this.lastword = this.word
 
-        do{ this.word = this.words.random()["label"] }
+        do{ this.word = (new Random()).array(this.words)["label"] }
         while(this.word === this.lastword)
 
         let w = this.word; this.resetWord(w)
@@ -69,25 +69,5 @@ export default class Typing extends System{
         }
 
         if(this.letters === "" || this.word === "") this.letters = this.#GenerateWord()
-    }
-}
-
-if(typeof random !== "function"){
-    function random(max = 1, min = 0) {
-        if (isNaN(min) && isNaN(max)) return;
-        min = parseFloat(min); max = parseFloat(max);
-        return Math.round(min + Math.random() * (max - min));
-    }
-}
-
-if(!Array.prototype.hasOwnProperty("random")){
-    Array.prototype.random = function(count = 1){
-        if(count > 1){
-            let aRand = []
-            for (let i = 0; i < count; i++)
-                aRand[i] = this[random(this.length-1)]
-            return aRand
-        }
-        else return this[random(this.length-1)]
     }
 }
