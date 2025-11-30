@@ -1,10 +1,11 @@
+import EventsKeys from "../eventskeys.js"
 import { TypingStatistics } from "../inc.js"
 import System from "../system.js"
 
 export default class Typing extends System{
     constructor({words, lang, limitWord = 3, isUpdate = false, timerStamp = 50, isDev = false}){
         super({isUpdate, timerStamp, isDev})
-        this.words = (words.length > 0) ? words.filter(word => word["label"].length > limitWord) : []
+        this.words = (words && words.length > 0) ? words.filter(word => word["label"].length > limitWord) : []
         this.lang = lang
         this.lastword = ""
         this.letters = this.#GenerateWord()
@@ -13,12 +14,14 @@ export default class Typing extends System{
 
     Start(){
         super.Start()
-        document.addEventListener("keydown", this.#KeyAction)
+        //document.addEventListener("keydown", this.#KeyAction)
+        EventsKeys.addCallbacks(this.#KeyAction.bind(this))
     }
 
     GameOver(){
         super.GameOver()
-        document.removeEventListener("keydown", this.#KeyAction)
+        //document.removeEventListener("keydown", this.#KeyAction)
+        EventsKeys.destroy()
     }
 
     goodLetter(key){}
@@ -35,7 +38,7 @@ export default class Typing extends System{
         if(!this.words.length) return ""
         this.lastword = this.word
 
-        do{ this.word = this.words[sRandom(this.words.length-1)]["label"] }
+        do{ this.word = this.words.random()["label"] }
         while(this.word === this.lastword)
 
         let w = this.word; this.resetWord(w)
@@ -44,7 +47,7 @@ export default class Typing extends System{
 
     #KeyAction(event){
         const KEY = event["key"]
-        if(this.letters !== "" && this.gamestate === this.GAMESTATE.PLAY && KEY !== "Enter"){
+        if(this.letters !== "" && this.isState(Typing.GAMESTATE.PLAY) && KEY !== "Enter"){
             this.statistics.addTappedLetter()
 
             if(this.letters[0].toLowerCase() === accentReplace(KEY.toLowerCase())){
@@ -66,5 +69,25 @@ export default class Typing extends System{
         }
 
         if(this.letters === "" || this.word === "") this.letters = this.#GenerateWord()
+    }
+}
+
+if(typeof random !== "function"){
+    function random(max = 1, min = 0) {
+        if (isNaN(min) && isNaN(max)) return;
+        min = parseFloat(min); max = parseFloat(max);
+        return Math.round(min + Math.random() * (max - min));
+    }
+}
+
+if(!Array.prototype.hasOwnProperty("random")){
+    Array.prototype.random = function(count = 1){
+        if(count > 1){
+            let aRand = []
+            for (let i = 0; i < count; i++)
+                aRand[i] = this[random(this.length-1)]
+            return aRand
+        }
+        else return this[random(this.length-1)]
     }
 }

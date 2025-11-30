@@ -20,6 +20,7 @@ export default class System{
 
     getState(){ return this.gamestate }
     setState(state){ return this.gamestate = state }
+    isState(state){ return this.gamestate === state }
     getTimerStamp(){ return this.timerStamp }
     setTimer(timer){
         this.timerStamp = timer

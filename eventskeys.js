@@ -3,9 +3,13 @@ import { keys } from "./libs/keycodes.js";
 export default class EventsKeys {
     static #key = {};
     static #profiles = {};
+    static #callbacks = [];
 
     static #onKeyUp(e) { this.#key[e.code] = false; }
-    static #onKeyDown(e) { this.#key[e.code] = e; }
+    static #onKeyDown(e) {
+        this.#key[e.code] = e;
+        this.#callbacks.forEach(cb => cb(e))
+    }
     static #onMouseUp(e) { this.#key[`mouse${e.button}`] = false; }
     static #onMouseDown(e) { this.#key[`mouse${e.button}`] = e; }
     static #isValid(value) { return value !== undefined && value !== null && value !== false; }
@@ -32,6 +36,7 @@ export default class EventsKeys {
     static getProfile(name){ return this.getKey(name) }
     static getKey(name){ return this.#profiles[name] }
     static getProfiles(){ return this.#profiles }
+    static addCallbacks(callback){ this.#callbacks.push(callback) }
     /**
      * 
      * @param {string} name 
