@@ -1,9 +1,11 @@
 import { Timer, Sound } from "./inc.js"
+import EventsKeys from "./eventskeys.js"
 
 export default class System{
     static GAMESTATE = { PLAY: "play", STOP: "stop", PAUSE: "pause", GAMEOVER: "gameover" }
 
-    constructor({timerStamp = 50, isUpdate = true, isDev = false}){
+    constructor({timerStamp = 50, isUpdate = true, isDev = false, eventskeys = true}){
+        if(eventskeys) EventsKeys.init()
         this.gamestate = System.GAMESTATE.PLAY
         this.timerStamp = timerStamp
         this.isDev = isDev
