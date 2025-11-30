@@ -1,6 +1,9 @@
 import Application from "../types/application.js"
 import { BaseElement, AutoTyped, Random, Sound } from "../inc.js"
 
+/**
+ * In development
+ */
 export default class Novel extends Application{
     static SFX = {typings: []}
     /**
