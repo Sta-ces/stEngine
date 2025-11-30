@@ -1,6 +1,3 @@
-// @ts-check
-/// <reference path="./inc.d.ts" />
-
 export class Shapes{
     static Square(ctx, {x, y, w, h, fillColor, strokeColor, strokeWidth = 0}){
         if(fillColor) ctx.fillStyle = fillColor;
